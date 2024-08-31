@@ -15,7 +15,11 @@
         android:id="@+id/nav_employees"
         android:name="com.example.assetmanagementsystem.ui.employees.EmployeesFragment"
         android:label="@string/menu_employees"
-        tools:layout="@layout/fragment_employees" />
+        tools:layout="@layout/fragment_employees" >
+        <action
+            android:id="@+id/action_nav_employees_to_nav_add_employee"
+            app:destination="@id/nav_add_employee" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_locations"
@@ -32,4 +36,13 @@
         android:name="com.example.assetmanagementsystem.ui.inventory.InventoryFragment"
         android:label="@string/menu_inventory"
         tools:layout="@layout/fragment_inventory" />
+    <fragment
+        android:id="@+id/nav_add_employee"
+        android:name="com.example.assetmanagementsystem.ui.employees.addemployee.AddEmployeeFragment"
+        android:label="@string/add_employee"
+        tools:layout="@layout/fragment_add_employee" >
+        <action
+            android:id="@+id/action_nav_add_employee_to_nav_employees"
+            app:destination="@id/nav_employees" />
+    </fragment>
 </navigation>

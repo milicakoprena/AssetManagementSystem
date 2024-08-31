@@ -9,7 +9,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
+import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.databinding.FragmentEmployeesBinding;
 
 public class EmployeesFragment extends Fragment {
@@ -26,6 +29,12 @@ public class EmployeesFragment extends Fragment {
 
         final TextView textView = binding.textEmployees;
         employeesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
+
+        binding.fabAddEmployee.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.action_nav_employees_to_nav_add_employee);
+        });
+
         return root;
     }
 
