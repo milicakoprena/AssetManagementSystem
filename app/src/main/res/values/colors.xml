@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="primary_50">#e4f2fc</color>
+    <color name="primary_100">#c8dde8</color>
+    <color name="primary_200">#abc5d3</color>
+    <color name="primary_300">#8dadbe</color>
+    <color name="primary_400">#7599ad</color>
+    <color name="primary_500">#5d879d</color>
+    <color name="primary_600">#51788b</color>
+    <color name="primary_700">#416374</color>
+    <color name="primary_800">#34505e</color>
+    <color name="primary_900">#223b47</color>
+
+    <color name="secondary_50">#fdfbea</color>
+    <color name="secondary_100">#faf4cb</color>
+    <color name="secondary_200">#f7edab</color>
+    <color name="secondary_300">#f4e68e</color>
+    <color name="secondary_400">#f2e17a</color>
+    <color name="secondary_500">#efdb69</color>
+    <color name="secondary_600">#ebcb64</color>
+    <color name="secondary_700">#e4b65c</color>
+    <color name="secondary_800">#dda154</color>
+    <color name="secondary_900">#d08047</color>
+</resources>
