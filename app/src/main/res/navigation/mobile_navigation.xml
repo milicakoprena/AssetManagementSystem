@@ -25,7 +25,11 @@
         android:id="@+id/nav_locations"
         android:name="com.example.assetmanagementsystem.ui.locations.LocationsFragment"
         android:label="@string/menu_locations"
-        tools:layout="@layout/fragment_locations" />
+        tools:layout="@layout/fragment_locations" >
+        <action
+            android:id="@+id/action_nav_locations_to_nav_add_location"
+            app:destination="@id/nav_add_location" />
+    </fragment>
     <fragment
         android:id="@+id/nav_settings"
         android:name="com.example.assetmanagementsystem.ui.settings.SettingsFragment"
@@ -44,5 +48,14 @@
         <action
             android:id="@+id/action_nav_add_employee_to_nav_employees"
             app:destination="@id/nav_employees" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_add_location"
+        android:name="com.example.assetmanagementsystem.ui.locations.addlocation.AddLocationFragment"
+        android:label="@string/add_location"
+        tools:layout="@layout/fragment_add_location" >
+        <action
+            android:id="@+id/action_nav_add_location_to_nav_locations"
+            app:destination="@id/nav_locations" />
     </fragment>
 </navigation>

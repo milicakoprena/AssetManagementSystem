@@ -46,6 +46,8 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     implementation("androidx.room:room-runtime:2.6.1")
+    implementation("com.google.android.gms:play-services-maps:19.0.0")
+    implementation("com.google.android.gms:play-services-location:19.0.0")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
     
     testImplementation("junit:junit:4.13.2")
