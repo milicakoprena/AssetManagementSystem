@@ -29,4 +29,6 @@
     <color name="secondary_700">#e4b65c</color>
     <color name="secondary_800">#dda154</color>
     <color name="secondary_900">#d08047</color>
+
+    <color name="input_icon_color">#65645e</color>
 </resources>

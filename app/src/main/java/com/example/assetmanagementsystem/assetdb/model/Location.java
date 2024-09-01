@@ -14,7 +14,7 @@ import java.util.Objects;
 public class Location implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "location_id")
-    private int locationId;
+    private long locationId;
     private String name;
     private double latitude;
     private double longitude;
@@ -29,11 +29,11 @@ public class Location implements Serializable {
     public Location() {
     }
 
-    public int getLocationId() {
+    public long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(int locationId) {
+    public void setLocationId(long locationId) {
         this.locationId = locationId;
     }
 

@@ -1,5 +1,8 @@
 package com.example.assetmanagementsystem.assetdb.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -11,10 +14,10 @@ import java.io.Serializable;
 import java.util.Objects;
 
 @Entity(tableName = Constants.TABLE_NAME_EMPLOYEE)
-public class Employee implements Serializable {
+public class Employee implements Serializable, Parcelable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "employee_id")
-    private int employeeId;
+    private long employeeId;
     @ColumnInfo(name = "first_name")
     private String firstName;
     @ColumnInfo(name = "last_name")
@@ -31,11 +34,43 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public int getEmployeeId() {
+    protected Employee(Parcel in) {
+        employeeId = in.readLong();
+        firstName = in.readString();
+        lastName = in.readString();
+        email = in.readString();
+    }
+
+    public static final Creator<Employee> CREATOR = new Creator<Employee>() {
+        @Override
+        public Employee createFromParcel(Parcel in) {
+            return new Employee(in);
+        }
+
+        @Override
+        public Employee[] newArray(int size) {
+            return new Employee[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(employeeId);
+        dest.writeString(firstName);
+        dest.writeString(lastName);
+        dest.writeString(email);
+    }
+
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(long employeeId) {
         this.employeeId = employeeId;
     }
 

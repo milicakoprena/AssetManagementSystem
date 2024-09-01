@@ -23,6 +23,7 @@
         app:layout_constraintVertical_bias="0.592">
 
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/txtInputFirstName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp">
@@ -30,38 +31,49 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/et_firstName"
                 android:hint="@string/input_first_name" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/txtInputLastName"
             android:layout_marginBottom="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:id="@+id/et_lastName"
                 android:hint="@string/input_last_name" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/txtInputEmail"
             android:layout_marginBottom="20dp">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/input_email" />
+                android:id="@+id/et_email"
+                android:hint="@string/input_email"
+                android:drawableLeft="@drawable/icon_email"
+                android:drawableTint="@color/input_icon_color"
+                android:drawablePadding="10dp"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/button_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_add_employee"
             android:drawableLeft="@drawable/icon_add_employee"
-            android:drawableTint="@color/primary_50"/>
+            android:drawableTint="@color/primary_50"
+            android:textSize="20dp"
+            android:padding="10dp"
+           />
     </LinearLayout>
 
 

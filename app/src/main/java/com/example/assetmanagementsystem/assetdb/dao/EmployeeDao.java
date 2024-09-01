@@ -1,5 +1,6 @@
 package com.example.assetmanagementsystem.assetdb.dao;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
@@ -26,4 +27,5 @@ public interface EmployeeDao {
     void deleteEmployee(Employee employee);
     @Delete
     void deleteEmployees(Employee... employees);
+
 }

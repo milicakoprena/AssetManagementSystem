@@ -34,13 +34,13 @@ public class Asset implements Serializable {
     @ColumnInfo(name = "date_created")
     private Date dateCreated;
     @ColumnInfo(name = "employee_id", index = true)
-    private int employeeId;
+    private long employeeId;
     @ColumnInfo(name = "location_id", index = true)
-    private int locationId;
+    private long locationId;
     @ColumnInfo(name = "image_url")
     private String imageUrl;
 
-    public Asset(String name, String description, double price, AssetCategoryEnum category, int employeeId, int locationId, String imageUrl) {
+    public Asset(String name, String description, double price, AssetCategoryEnum category, long employeeId, long locationId, String imageUrl) {
         this.name = name;
         this.description = description;
         this.price = price;
@@ -103,19 +103,19 @@ public class Asset implements Serializable {
         this.dateCreated = dateCreated;
     }
 
-    public int getEmployeeId() {
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(int employeeId) {
+    public void setEmployeeId(long employeeId) {
         this.employeeId = employeeId;
     }
 
-    public int getLocationId() {
+    public long getLocationId() {
         return locationId;
     }
 
-    public void setLocationId(int locationId) {
+    public void setLocationId(long locationId) {
         this.locationId = locationId;
     }
 

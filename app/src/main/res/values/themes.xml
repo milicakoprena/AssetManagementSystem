@@ -14,6 +14,7 @@
 
         <!-- Customize your theme here. -->
         <item name="textInputStyle">@style/CustomMaterialTextInputLayoutStyle</item>
+        <item name="imageButtonStyle">@style/CustomImageButtonStyle</item>
     </style>
 
     <style name="Theme.AssetManagementSystem.NoActionBar">
@@ -31,6 +32,10 @@
         <item name="boxStrokeWidth">0dp</item>
     </style>
 
+    <style name="CustomImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:scaleType">centerCrop</item>
+    </style>
 
 
 </resources>

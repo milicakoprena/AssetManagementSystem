@@ -41,18 +41,18 @@ import java.util.Objects;
 public class Inventory implements Serializable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "inventory_id")
-    private int inventoryId;
+    private long inventoryId;
     private long barcode;
     @ColumnInfo(name = "old_employee_id", index = true)
-    private int oldEmployeeId;
+    private long oldEmployeeId;
     @ColumnInfo(name = "new_employee_id", index = true)
-    private int newEmployeeId;
+    private long newEmployeeId;
     @ColumnInfo(name = "old_location_id", index = true)
-    private int oldLocationId;
+    private long oldLocationId;
     @ColumnInfo(name = "new_location_id", index = true)
-    private int newLocationId;
+    private long newLocationId;
 
-    public Inventory(long barcode, int oldEmployeeId, int newEmployeeId, int oldLocationId, int newLocationId) {
+    public Inventory(long barcode, long oldEmployeeId, long newEmployeeId, long oldLocationId, long newLocationId) {
         this.barcode = barcode;
         this.oldEmployeeId = oldEmployeeId;
         this.newEmployeeId = newEmployeeId;
@@ -64,11 +64,11 @@ public class Inventory implements Serializable {
     public Inventory() {
     }
 
-    public int getInventoryId() {
+    public long getInventoryId() {
         return inventoryId;
     }
 
-    public void setInventoryId(int inventoryId) {
+    public void setInventoryId(long inventoryId) {
         this.inventoryId = inventoryId;
     }
 
@@ -80,35 +80,35 @@ public class Inventory implements Serializable {
         this.barcode = barcode;
     }
 
-    public int getOldEmployeeId() {
+    public long getOldEmployeeId() {
         return oldEmployeeId;
     }
 
-    public void setOldEmployeeId(int oldEmployeeId) {
+    public void setOldEmployeeId(long oldEmployeeId) {
         this.oldEmployeeId = oldEmployeeId;
     }
 
-    public int getNewEmployeeId() {
+    public long getNewEmployeeId() {
         return newEmployeeId;
     }
 
-    public void setNewEmployeeId(int newEmployeeId) {
+    public void setNewEmployeeId(long newEmployeeId) {
         this.newEmployeeId = newEmployeeId;
     }
 
-    public int getOldLocationId() {
+    public long getOldLocationId() {
         return oldLocationId;
     }
 
-    public void setOldLocationId(int oldLocationId) {
+    public void setOldLocationId(long oldLocationId) {
         this.oldLocationId = oldLocationId;
     }
 
-    public int getNewLocationId() {
+    public long getNewLocationId() {
         return newLocationId;
     }
 
-    public void setNewLocationId(int newLocationId) {
+    public void setNewLocationId(long newLocationId) {
         this.newLocationId = newLocationId;
     }
 

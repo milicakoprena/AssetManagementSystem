@@ -20,8 +20,6 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
-    private AssetDatabase assetDatabase;
-    private EmployeeDao employeeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +39,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
-
-        // Initialize Database and DAO
-        assetDatabase = AssetDatabase.getInstance(this);
-        employeeDao = assetDatabase.getEmployeeDao();
     }
 
 
