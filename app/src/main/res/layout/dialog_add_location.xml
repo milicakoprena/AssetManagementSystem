@@ -9,14 +9,13 @@
         android:id="@+id/txtInputName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
-        >
+        android:layout_marginBottom="15dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/editTextLocationName"
-            android:hint="@string/input_location_name"/>
+            android:hint="@string/input_location_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
 

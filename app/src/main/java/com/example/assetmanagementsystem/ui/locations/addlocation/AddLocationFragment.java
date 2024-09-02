@@ -83,7 +83,8 @@ public class AddLocationFragment extends Fragment {
             @Override
             public void onMapReady(@NonNull GoogleMap map) {
                 googleMap = map;
-
+                LatLng location = new LatLng(44.772182, 17.191000);
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
                 googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
                     @Override
                     public void onMapClick(@NonNull LatLng latLng) {
@@ -137,7 +138,7 @@ public class AddLocationFragment extends Fragment {
         markerOptions.position(latLng);
         markerOptions.title(latLng.latitude + " : " + latLng.longitude);
         googleMap.clear();
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
         googleMap.addMarker(markerOptions);
 
         buttonAddLocation.setVisibility(View.VISIBLE);
