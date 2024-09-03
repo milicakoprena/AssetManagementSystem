@@ -9,7 +9,11 @@
         android:id="@+id/nav_assets"
         android:name="com.example.assetmanagementsystem.ui.assets.AssetsFragment"
         android:label="@string/menu_assets"
-        tools:layout="@layout/fragment_assets" />
+        tools:layout="@layout/fragment_assets" >
+        <action
+            android:id="@+id/action_nav_assets_to_nav_add_asset"
+            app:destination="@id/nav_add_asset" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_employees"
@@ -57,5 +61,14 @@
         <action
             android:id="@+id/action_nav_add_location_to_nav_locations"
             app:destination="@id/nav_locations" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_add_asset"
+        android:name="com.example.assetmanagementsystem.ui.assets.addasset.AddAssetFragment"
+        android:label="@string/add_asset"
+        tools:layout="@layout/fragment_add_asset">
+        <action
+            android:id="@+id/action_nav_add_asset_to_nav_assets"
+            app:destination="@id/nav_assets" />
     </fragment>
 </navigation>

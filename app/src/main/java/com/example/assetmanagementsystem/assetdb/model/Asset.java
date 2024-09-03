@@ -25,7 +25,7 @@ import java.util.Objects;
                         onDelete = ForeignKey.CASCADE)
         })
 public class Asset implements Serializable {
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     private long barcode;
     private String name;
     private String description;
@@ -40,7 +40,8 @@ public class Asset implements Serializable {
     @ColumnInfo(name = "image_url")
     private String imageUrl;
 
-    public Asset(String name, String description, double price, AssetCategoryEnum category, long employeeId, long locationId, String imageUrl) {
+    public Asset(long barcode, String name, String description, double price, AssetCategoryEnum category, long employeeId, long locationId, String imageUrl) {
+        this.barcode = barcode;
         this.name = name;
         this.description = description;
         this.price = price;

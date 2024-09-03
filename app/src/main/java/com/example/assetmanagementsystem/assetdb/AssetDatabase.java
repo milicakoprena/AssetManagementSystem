@@ -18,7 +18,7 @@ import com.example.assetmanagementsystem.util.DateRoomConverter;
 
 import android.content.Context;
 
-@Database(entities = { Asset.class, Employee.class, Location.class, Inventory.class }, version = 3, exportSchema = false)
+@Database(entities = { Asset.class, Employee.class, Location.class, Inventory.class }, version = 4, exportSchema = false)
 @TypeConverters({DateRoomConverter.class})
 public abstract class AssetDatabase extends RoomDatabase {
 

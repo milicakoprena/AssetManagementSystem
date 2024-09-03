@@ -36,6 +36,4 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
-
-
 </resources>

@@ -16,4 +16,13 @@ public enum AssetCategoryEnum {
     public String getDisplayName() {
         return displayName;
     }
+
+    public static AssetCategoryEnum fromString(String text) {
+        for (AssetCategoryEnum category : AssetCategoryEnum.values()) {
+            if (category.displayName.equalsIgnoreCase(text)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("No enum constant with text " + text + " found");
+    }
 }
