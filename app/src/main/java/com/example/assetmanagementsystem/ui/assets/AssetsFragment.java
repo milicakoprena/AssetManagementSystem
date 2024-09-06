@@ -37,9 +37,9 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
 
     private FragmentAssetsBinding binding;
     private RecyclerView recyclerView;
-    private AssetDatabase assetDatabase;
-    private List<Asset> assets;
-    private AssetsAdapter adapter;
+    protected AssetDatabase assetDatabase;
+    protected List<Asset> assets;
+    protected AssetsAdapter adapter;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -70,33 +70,9 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
 
     private void displayList() {
         assetDatabase = AssetDatabase.getInstance(requireContext());
-        new AssetsFragment.RetrieveTask(this).execute();
+        new AssetsAsync.RetrieveTask(this).execute();
     }
 
-    private static class RetrieveTask extends AsyncTask<Void, Void, List<Asset>> {
-        private WeakReference<AssetsFragment> reference;
-        RetrieveTask(AssetsFragment fragment) {
-            reference = new WeakReference<>(fragment);
-        }
-
-        @Override
-        protected List<Asset> doInBackground(Void... voids) {
-            if (reference.get() != null)
-                return reference.get().assetDatabase.getAssetDao().getAssets();
-            else
-                return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Asset> assets) {
-            AssetsFragment fragment = reference.get();
-            if (fragment != null && assets != null) {
-                fragment.assets.clear();
-                fragment.assets.addAll(assets);
-                fragment.adapter.notifyDataSetChanged();
-            }
-        }
-    }
 
     @Override
     public void onDestroyView() {
@@ -106,7 +82,21 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
 
     @Override
     public void onAssetClick(int pos) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Do you want to update asset " + assets.get(pos).getName() + "?")
+                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                    switch (which) {
+                        case 0:
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("asset", assets.get(pos));
+                            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                            navController.navigate(R.id.action_nav_assets_to_nav_add_asset, bundle);
+                            break;
 
+                        case 1:
+                            break;
+                    }
+                }).show();
     }
 
     @Override

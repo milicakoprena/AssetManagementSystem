@@ -2,36 +2,26 @@ package com.example.assetmanagementsystem.ui.locations;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assetmanagementsystem.R;
-import com.example.assetmanagementsystem.adapter.EmployeesAdapter;
 import com.example.assetmanagementsystem.adapter.LocationsAdapter;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
-import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.assetdb.model.Location;
-import com.example.assetmanagementsystem.databinding.FragmentEmployeesBinding;
 import com.example.assetmanagementsystem.databinding.FragmentLocationsBinding;
-import com.example.assetmanagementsystem.ui.employees.EmployeesFragment;
-import com.example.assetmanagementsystem.ui.employees.addemployee.AddEmployeeFragment;
-import com.example.assetmanagementsystem.ui.locations.addlocation.AddLocationFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -39,18 +29,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class LocationsFragment extends Fragment implements LocationsAdapter.OnLocationItemClick {
 
     private FragmentLocationsBinding binding;
-    private GoogleMap googleMap;
+    protected GoogleMap googleMap;
     private RecyclerView recyclerView;
-    private AssetDatabase assetDatabase;
-    private List<Location> locations;
-    private LocationsAdapter locationsAdapter;
+    protected AssetDatabase assetDatabase;
+    protected List<Location> locations;
+    protected LocationsAdapter locationsAdapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,7 +82,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
         });
     }
 
-    private void showMarkers() {
+    protected void showMarkers() {
         googleMap.clear();
         for (Location location : locations) {
             MarkerOptions markerOptions = new MarkerOptions();
@@ -105,38 +94,9 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
 
     private void displayList() {
         assetDatabase = AssetDatabase.getInstance(requireContext());
-        new LocationsFragment.RetrieveTask(this).execute();
+        new LocationsAsync.RetrieveTask(this).execute();
     }
 
-    private static class RetrieveTask extends AsyncTask<Void, Void, List<Location>> {
-        private WeakReference<LocationsFragment> reference;
-
-        RetrieveTask(LocationsFragment fragment) {
-            reference = new WeakReference<>(fragment);
-        }
-
-        @Override
-        protected List<Location> doInBackground(Void... voids) {
-            if (reference.get() != null)
-                return reference.get().assetDatabase.getLocationDao().getLocations();
-            else
-                return null;
-        }
-
-        @Override
-        protected void onPostExecute(List<Location> locations) {
-            LocationsFragment fragment = reference.get();
-            if (fragment != null && locations != null) {
-                fragment.locations.clear();
-                fragment.locations.addAll(locations);
-                fragment.locationsAdapter.notifyDataSetChanged();
-
-                if (fragment.googleMap != null) {
-                    fragment.showMarkers();
-                }
-            }
-        }
-    }
 
     @Override
     public void onDestroyView() {
@@ -157,21 +117,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
                 .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    assetDatabase.getLocationDao().deleteLocation(locations.get(pos));
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onPostExecute(Void aVoid) {
-                                    locations.remove(pos);
-                                    locationsAdapter.notifyItemRemoved(pos);
-                                    Toast.makeText(requireContext(), "Location deleted", Toast.LENGTH_SHORT).show();
-                                    showMarkers();
-                                }
-                            }.execute();
+                            new LocationsAsync.DeleteTask(this,pos).execute();
                             break;
                         case 1:
                             break;
@@ -199,7 +145,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
                     Toast.makeText(requireContext(), "Location name cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
                     location.setName(locationName);
-                    new LocationsFragment.UpdateTask(LocationsFragment.this, location, locationsAdapter).execute();
+                    new LocationsAsync.UpdateTask(LocationsFragment.this, location, locationsAdapter).execute();
                 }
             }
         });
@@ -211,37 +157,6 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
         });
 
         builder.show();
-    }
-
-    private static class UpdateTask extends AsyncTask<Void, Void, Boolean> {
-        private WeakReference<LocationsFragment> fragmentReference;
-        private Location location;
-        private LocationsAdapter locationsAdapter;
-
-        UpdateTask(LocationsFragment fragment, Location location, LocationsAdapter locationsAdapter) {
-            fragmentReference = new WeakReference<>(fragment);
-            this.location = location;
-            this.locationsAdapter = locationsAdapter;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... objs) {
-            LocationsFragment fragment = fragmentReference.get();
-            if (fragment != null) {
-                fragment.assetDatabase.getLocationDao().updateLocation(location);
-                Log.e("ID ", "location updated");
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean bool) {
-            LocationsFragment fragment = fragmentReference.get();
-            if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Location updated successfully", Toast.LENGTH_SHORT).show();
-                locationsAdapter.notifyDataSetChanged();
-            }
-        }
     }
 
     @Override

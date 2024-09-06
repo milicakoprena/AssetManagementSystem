@@ -1,19 +1,14 @@
-package com.example.assetmanagementsystem.ui.locations.addlocation;
+package com.example.assetmanagementsystem.ui.locations;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +20,7 @@ import android.Manifest;
 
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
-import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.assetdb.model.Location;
-import com.example.assetmanagementsystem.ui.employees.addemployee.AddEmployeeFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -37,8 +30,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.lang.ref.WeakReference;
 
 public class AddLocationFragment extends Fragment {
 
@@ -50,8 +41,7 @@ public class AddLocationFragment extends Fragment {
     private double locationLatitude;
     private double locationLongitude;
     private Location location;
-
-    private AssetDatabase assetDatabase;
+    protected AssetDatabase assetDatabase;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -120,7 +110,7 @@ public class AddLocationFragment extends Fragment {
                     return;
                 }
                 Location location = new Location(locationName, locationLatitude, locationLongitude);
-                new InsertTask(AddLocationFragment.this, location).execute();
+                new LocationsAsync.InsertTask(AddLocationFragment.this, location).execute();
             }
         });
         builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -174,43 +164,12 @@ public class AddLocationFragment extends Fragment {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == 1) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Permission granted, show my location
                 checkLocationPermissionAndShowMyLocation();
             } else {
-                // Permission denied
                 Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private static class InsertTask extends AsyncTask<Void, Void, Boolean> {
-        private WeakReference<AddLocationFragment> fragmentReference;
-        private Location location;
 
-        InsertTask(AddLocationFragment fragment, Location location) {
-            fragmentReference = new WeakReference<>(fragment);
-            this.location = location;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... objs) {
-            AddLocationFragment fragment = fragmentReference.get();
-            if (fragment != null) {
-                long j = fragment.assetDatabase.getLocationDao().insertLocation(location);
-                location.setLocationId(j);
-                Log.e("ID ", "doInBackground: " + j);
-            }
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean bool) {
-            AddLocationFragment fragment = fragmentReference.get();
-            if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Location added successfully", Toast.LENGTH_SHORT).show();
-                NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
-                navController.navigate(R.id.action_nav_add_location_to_nav_locations);
-            }
-        }
-    }
 }

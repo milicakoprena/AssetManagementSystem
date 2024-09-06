@@ -1,77 +1,68 @@
-package com.example.assetmanagementsystem.ui.employees.addemployee;
+package com.example.assetmanagementsystem.ui.employees;
 
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
-
 import com.example.assetmanagementsystem.R;
-import com.example.assetmanagementsystem.assetdb.AssetDatabase;
 import com.example.assetmanagementsystem.assetdb.model.Employee;
-import com.google.android.material.textfield.TextInputEditText;
 
 import java.lang.ref.WeakReference;
+import java.util.List;
 
-
-public class AddEmployeeFragment extends Fragment {
-    private TextInputEditText et_firstName, et_lastName, et_email;
-    private AssetDatabase assetDatabase;
-    private Employee employee;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_add_employee, container, false);
-
-        et_firstName = rootView.findViewById(R.id.et_firstName);
-        et_lastName = rootView.findViewById(R.id.et_lastName);
-        et_email = rootView.findViewById(R.id.et_email);
-        assetDatabase = AssetDatabase.getInstance(requireContext());
-        Button button_add = rootView.findViewById(R.id.button_add);
-
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            employee = bundle.getParcelable("employee");
-            if (employee != null) {
-                et_firstName.setText(employee.getFirstName());
-                et_lastName.setText(employee.getLastName());
-                et_email.setText(employee.getEmail());
-                button_add.setText("UPDATE EMPLOYEE");
-                button_add.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        employee.setFirstName(et_firstName.getText().toString());
-                        employee.setLastName(et_lastName.getText().toString());
-                        employee.setEmail(et_email.getText().toString());
-                        new UpdateTask(AddEmployeeFragment.this, employee).execute();
-                    }
-                });
-            }
-
-        } else {
-            button_add.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    employee = new Employee(et_firstName.getText().toString(), et_lastName.getText().toString(), et_email.getText().toString());
-                    new InsertTask(AddEmployeeFragment.this, employee).execute();
-                }
-            });
+public class EmployeesAsync {
+    protected static class RetrieveTask extends AsyncTask<Void, Void, List<Employee>> {
+        private WeakReference<EmployeesFragment> reference;
+        RetrieveTask(EmployeesFragment fragment) {
+            reference = new WeakReference<>(fragment);
         }
-        return rootView;
+
+        @Override
+        protected List<Employee> doInBackground(Void... voids) {
+            if (reference.get() != null)
+                return reference.get().assetDatabase.getEmployeeDao().getEmployees();
+            else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Employee> employees) {
+            EmployeesFragment fragment = reference.get();
+            if (fragment != null && employees != null) {
+                fragment.employees.clear();
+                fragment.employees.addAll(employees);
+                fragment.employeesAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
+    protected static class DeleteTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<EmployeesFragment> reference;
+        private int pos;
 
-    private static class InsertTask extends AsyncTask<Void, Void, Boolean> {
+        public DeleteTask(EmployeesFragment fragment, int pos) {
+            reference = new WeakReference<>(fragment);
+            this.pos = pos;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            reference.get().assetDatabase.getEmployeeDao().deleteEmployee(reference.get().employees.get(pos));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            reference.get().employees.remove(pos);
+            reference.get().employeesAdapter.notifyItemRemoved(pos);
+            Toast.makeText(reference.get().requireContext(), "Employee deleted", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    protected static class InsertTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<AddEmployeeFragment> fragmentReference;
         private Employee employee;
 
@@ -102,7 +93,7 @@ public class AddEmployeeFragment extends Fragment {
         }
     }
 
-    private static class UpdateTask extends AsyncTask<Void, Void, Boolean> {
+    protected static class UpdateTask extends AsyncTask<Void, Void, Boolean> {
         private WeakReference<AddEmployeeFragment> fragmentReference;
         private Employee employee;
 

@@ -1,5 +1,8 @@
 package com.example.assetmanagementsystem.assetdb.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -10,7 +13,9 @@ import com.example.assetmanagementsystem.assetdb.enums.AssetCategoryEnum;
 import com.example.assetmanagementsystem.util.Constants;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Objects;
 
 @Entity(tableName = Constants.TABLE_NAME_ASSET,
@@ -24,7 +29,7 @@ import java.util.Objects;
                         childColumns = "location_id",
                         onDelete = ForeignKey.CASCADE)
         })
-public class Asset implements Serializable {
+public class Asset implements Serializable, Parcelable {
     @PrimaryKey
     private long barcode;
     private String name;
@@ -32,7 +37,7 @@ public class Asset implements Serializable {
     private double price;
     private AssetCategoryEnum category;
     @ColumnInfo(name = "date_created")
-    private Date dateCreated;
+    private String dateCreated;
     @ColumnInfo(name = "employee_id", index = true)
     private long employeeId;
     @ColumnInfo(name = "location_id", index = true)
@@ -49,11 +54,54 @@ public class Asset implements Serializable {
         this.employeeId = employeeId;
         this.locationId = locationId;
         this.imageUrl = imageUrl;
-        this.dateCreated = new Date(System.currentTimeMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
+        this.dateCreated = sdf.format(new Date(System.currentTimeMillis()));
     }
 
     @Ignore
     public Asset() {
+    }
+
+    protected Asset(Parcel in) {
+        barcode = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        price = in.readDouble();
+        category = AssetCategoryEnum.valueOf(in.readString());
+        dateCreated = in.readString();
+        employeeId = in.readLong();
+        locationId = in.readLong();
+        imageUrl = in.readString();
+    }
+
+    public static final Creator<Asset> CREATOR = new Creator<Asset>() {
+        @Override
+        public Asset createFromParcel(Parcel in) {
+            return new Asset(in);
+        }
+
+        @Override
+        public Asset[] newArray(int size) {
+            return new Asset[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(employeeId);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeDouble(price);
+        dest.writeString(category.getDisplayName());
+        dest.writeString(dateCreated);
+        dest.writeLong(employeeId);
+        dest.writeLong(locationId);
+        dest.writeString(imageUrl);
     }
 
     public long getBarcode() {
@@ -96,11 +144,11 @@ public class Asset implements Serializable {
         this.price = price;
     }
 
-    public Date getDateCreated() {
+    public String getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(Date dateCreated) {
+    public void setDateCreated(String dateCreated) {
         this.dateCreated = dateCreated;
     }
 

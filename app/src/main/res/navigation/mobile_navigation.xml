@@ -46,7 +46,7 @@
         tools:layout="@layout/fragment_inventory" />
     <fragment
         android:id="@+id/nav_add_employee"
-        android:name="com.example.assetmanagementsystem.ui.employees.addemployee.AddEmployeeFragment"
+        android:name="com.example.assetmanagementsystem.ui.employees.AddEmployeeFragment"
         android:label="@string/add_employee"
         tools:layout="@layout/fragment_add_employee" >
         <action
@@ -55,7 +55,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_add_location"
-        android:name="com.example.assetmanagementsystem.ui.locations.addlocation.AddLocationFragment"
+        android:name="com.example.assetmanagementsystem.ui.locations.AddLocationFragment"
         android:label="@string/add_location"
         tools:layout="@layout/fragment_add_location" >
         <action
@@ -64,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/nav_add_asset"
-        android:name="com.example.assetmanagementsystem.ui.assets.addasset.AddAssetFragment"
+        android:name="com.example.assetmanagementsystem.ui.assets.AddAssetFragment"
         android:label="@string/add_asset"
         tools:layout="@layout/fragment_add_asset">
         <action

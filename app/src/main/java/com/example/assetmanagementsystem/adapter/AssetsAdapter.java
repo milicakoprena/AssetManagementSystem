@@ -19,6 +19,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.List;
+
 import com.example.assetmanagementsystem.glide.GlideApp;
 
 public class AssetsAdapter extends RecyclerView.Adapter<AssetsAdapter.BeanHolder> {
@@ -48,18 +49,19 @@ public class AssetsAdapter extends RecyclerView.Adapter<AssetsAdapter.BeanHolder
         holder.textViewPrice.setText(list.get(position).getPrice() + " KM");
         holder.textViewCategory.setText(list.get(position).getCategory().getDisplayName());
 
+        if (list.get(position).getImageUrl() != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(list.get(position).getImageUrl());
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(list.get(position).getImageUrl());
+            RequestOptions requestOptions = new RequestOptions()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder)
+                    .centerCrop();
 
-        RequestOptions requestOptions = new RequestOptions()
-                .placeholder(R.drawable.placeholder)
-                .error(R.drawable.placeholder)
-                .centerCrop();
-
-        GlideApp.with(holder.itemView.getContext())
-                .load(storageReference)
-                .apply(requestOptions)
-                .into(holder.imageView);
+            GlideApp.with(holder.itemView.getContext())
+                    .load(storageReference)
+                    .apply(requestOptions)
+                    .into(holder.imageView);
+        }
     }
 
     @Override
