@@ -15,6 +15,7 @@
     <string name="add_employee">Add employee</string>
     <string name="add_location">Add location</string>
     <string name="add_asset">Add asset</string>
+    <string name="add_inventory">Add inventory</string>
 
     <string name="category_furniture">Furniture</string>
     <string name="category_technical_equipment">Technical Equipment</string>
@@ -39,4 +40,13 @@
     <string name="button_scan">Scan</string>
     <string name="button_gallery">Gallery</string>
     <string name="button_camera">Camera</string>
+    <string name="button_find">Find</string>
+    <string name="button_add_inventory">Add inventory</string>
+
+    <string name="current_employee">Current employee</string>
+    <string name="new_employee">New employee</string>
+    <string name="current_location">Current location</string>
+    <string name="new_location">New location</string>
+    <string name="same_employee">Same employee</string>
+    <string name="same_location">Same location</string>
 </resources>

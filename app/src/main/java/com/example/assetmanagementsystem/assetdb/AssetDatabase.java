@@ -7,6 +7,7 @@ import androidx.room.Database;
 
 import com.example.assetmanagementsystem.assetdb.dao.AssetDao;
 import com.example.assetmanagementsystem.assetdb.dao.EmployeeDao;
+import com.example.assetmanagementsystem.assetdb.dao.InventoryAssetDao;
 import com.example.assetmanagementsystem.assetdb.dao.InventoryDao;
 import com.example.assetmanagementsystem.assetdb.dao.LocationDao;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
@@ -26,6 +27,7 @@ public abstract class AssetDatabase extends RoomDatabase {
     public abstract EmployeeDao getEmployeeDao();
     public abstract LocationDao getLocationDao();
     public abstract InventoryDao getInventoryDao();
+    public abstract InventoryAssetDao getInventoryAssetDao();
     private static AssetDatabase assetDb;
 
     // synchronized is use to avoid concurrent access in multithred environment

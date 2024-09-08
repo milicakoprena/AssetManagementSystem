@@ -43,7 +43,11 @@
         android:id="@+id/nav_inventory"
         android:name="com.example.assetmanagementsystem.ui.inventory.InventoryFragment"
         android:label="@string/menu_inventory"
-        tools:layout="@layout/fragment_inventory" />
+        tools:layout="@layout/fragment_inventory" >
+        <action
+            android:id="@+id/action_nav_inventory_to_nav_add_inventory"
+            app:destination="@id/nav_add_inventory" />
+    </fragment>
     <fragment
         android:id="@+id/nav_add_employee"
         android:name="com.example.assetmanagementsystem.ui.employees.AddEmployeeFragment"
@@ -70,5 +74,14 @@
         <action
             android:id="@+id/action_nav_add_asset_to_nav_assets"
             app:destination="@id/nav_assets" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_add_inventory"
+        android:name="com.example.assetmanagementsystem.ui.inventory.AddInventoryFragment"
+        android:label="@string/add_inventory"
+        tools:layout="@layout/fragment_add_inventory" >
+        <action
+            android:id="@+id/action_nav_add_inventory_to_nav_inventory"
+            app:destination="@id/nav_inventory" />
     </fragment>
 </navigation>

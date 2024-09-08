@@ -27,4 +27,7 @@ public interface AssetDao {
 
     @Delete
     void deleteAssets(Asset... assets);
+
+    @Query("SELECT * FROM " + Constants.TABLE_NAME_ASSET + " WHERE barcode = :barcode")
+    Asset findById(long barcode);
 }

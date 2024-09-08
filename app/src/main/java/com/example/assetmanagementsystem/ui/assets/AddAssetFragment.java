@@ -35,6 +35,7 @@ import com.example.assetmanagementsystem.assetdb.helpers.EmployeeSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.helpers.LocationSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.glide.GlideApp;
+import com.example.assetmanagementsystem.util.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
@@ -78,11 +79,6 @@ public class AddAssetFragment extends Fragment {
     protected String imageUrl;
     private ImageView imageView;
     protected boolean imageChanged = false;
-
-    private static final int REQUEST_CODE_PERMISSION_CAMERA = 1001;
-    private static final int REQUEST_CODE_PERMISSION_QR = 1002;
-    private static final int REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES = 1003;
-    private static final int REQUEST_CODE_IMAGE_PICK = 1004;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -267,13 +263,13 @@ public class AddAssetFragment extends Fragment {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_CODE_PERMISSION_QR) {
+        if (requestCode == Constants.REQUEST_CODE_PERMISSION_QR) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 startScanning();
             } else {
                 Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == REQUEST_CODE_PERMISSION_CAMERA) {
+        } else if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 try {
                     takePhoto();
@@ -283,7 +279,7 @@ public class AddAssetFragment extends Fragment {
             } else {
                 Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
             }
-        } else if (requestCode == REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES) {
+        } else if (requestCode == Constants.REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 openGallery();
             } else {
@@ -294,7 +290,7 @@ public class AddAssetFragment extends Fragment {
 
     private void handleScanning() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_QR);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_QR);
             return;
         }
         startScanning();
@@ -309,7 +305,7 @@ public class AddAssetFragment extends Fragment {
 
     private void handleCamera() throws IOException {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, REQUEST_CODE_PERMISSION_CAMERA);
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_CAMERA);
             return;
         }
         takePhoto();
@@ -324,7 +320,7 @@ public class AddAssetFragment extends Fragment {
                         "com.example.assetmanagementsystem.fileprovider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(takePictureIntent, REQUEST_CODE_IMAGE_PICK);
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_IMAGE_PICK);
             }
         }
     }
@@ -346,7 +342,7 @@ public class AddAssetFragment extends Fragment {
 
     private void handleGallery() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES);
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, Constants.REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES);
             return;
         }
         openGallery();
@@ -354,13 +350,13 @@ public class AddAssetFragment extends Fragment {
 
     private void openGallery() {
         Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhotoIntent, REQUEST_CODE_IMAGE_PICK);
+        startActivityForResult(pickPhotoIntent, Constants.REQUEST_CODE_IMAGE_PICK);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CODE_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Constants.REQUEST_CODE_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             if (data != null && data.getData() != null) {
                 photoUri = data.getData();
                 Toast.makeText(getContext(), "Photo selected from gallery!", Toast.LENGTH_SHORT).show();

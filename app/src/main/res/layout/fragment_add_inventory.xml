@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.inventory.AddInventoryFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="0dp"
+        android:background="@color/primary_100"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.592">
+
+        <LinearLayout
+            android:id="@+id/layout_barcode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/txtInputBarcode"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/et_barcode"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/input_barcode"
+                    android:inputType="number" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/button_find"
+                android:layout_width="55dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="10dp"
+                android:drawableLeft="@drawable/icon_search"
+                android:drawableTint="@color/primary_50"
+                android:tooltipText="@string/button_find" />
+
+            <Button
+                android:id="@+id/button_scan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginTop="5dp"
+                android:drawableLeft="@drawable/icon_scan"
+                android:drawableTint="@color/primary_50"
+                android:text="@string/button_scan" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tw_current_employee"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/current_employee"
+            android:textSize="18dp"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tw_new_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_employee"
+                android:layout_marginRight="10dp"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"></TextView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/secondary_50"
+                android:hint="@string/select_employee"
+                android:layout_gravity="bottom">
+
+                <Spinner
+                    android:id="@+id/spinner_employee"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown" />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <Switch
+            android:id="@+id/sw_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/same_employee"
+            android:textSize="18dp"
+            android:textColor="@color/input_icon_color"
+            android:layout_gravity="start"
+            android:layout_marginBottom="20dp"
+            ></Switch>
+
+        <TextView
+            android:id="@+id/tw_current_location"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="@string/current_location"
+            android:textSize="18dp"></TextView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tw_new_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/new_location"
+                android:layout_marginRight="10dp"
+                android:textSize="18dp"
+                android:layout_gravity="center_vertical"></TextView>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@color/secondary_50"
+                android:hint="@string/select_location"
+                android:layout_gravity="bottom">
+
+                <Spinner
+                    android:id="@+id/spinner_location"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:spinnerMode="dropdown"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+        <Switch
+            android:id="@+id/sw_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/same_location"
+            android:textSize="18dp"
+            android:textColor="@color/input_icon_color"
+            android:layout_gravity="start"
+            android:layout_marginBottom="20dp"
+            ></Switch>
+
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_add_inventory"
+            android:drawableLeft="@drawable/icon_add_inventory"
+            android:drawableTint="@color/primary_50"
+            android:textSize="20dp"
+            android:padding="10dp"
+            />
+    </LinearLayout>
+
+</FrameLayout>
