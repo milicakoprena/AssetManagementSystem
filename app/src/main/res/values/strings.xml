@@ -49,4 +49,10 @@
     <string name="new_location">New location</string>
     <string name="same_employee">Same employee</string>
     <string name="same_location">Same location</string>
+
+    <string name="search_by_name">Search by name</string>
+    <string name="search_by_desc">Search by description</string>
+    <string name="search_by_email">Search by email</string>
+    <string name="search_by_new_employee">Search by new employee</string>
+    <string name="search_by_new_location">Search by new location</string>
 </resources>

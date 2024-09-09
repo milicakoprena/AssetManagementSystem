@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
 
 public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetItemClick{
 
@@ -39,7 +41,10 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
     private RecyclerView recyclerView;
     protected AssetDatabase assetDatabase;
     protected List<Asset> assets;
+    protected List<Asset> filteredAssets;
     protected AssetsAdapter adapter;
+    private SearchView searchAssetName;
+    private SearchView searchAssetDesc;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -61,9 +66,46 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         assets = new ArrayList<>();
+        filteredAssets = new ArrayList<>();
 
-        adapter = new AssetsAdapter(assets, requireContext(), this);
+        adapter = new AssetsAdapter(filteredAssets, requireContext(), this);
         recyclerView.setAdapter(adapter);
+
+        searchAssetName = view.findViewById(R.id.search_assetName);
+        searchAssetName.setIconifiedByDefault(false);
+        searchAssetName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+               searchByName(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByName(newText);
+
+                return false;
+            }
+        });
+
+        searchAssetDesc = view.findViewById(R.id.search_assetDesc);
+        searchAssetDesc.setIconifiedByDefault(false);
+        searchAssetDesc.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByDesc(query);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByDesc(newText);
+
+                return false;
+            }
+        });
 
         displayList();
     }
@@ -71,6 +113,22 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
     private void displayList() {
         assetDatabase = AssetDatabase.getInstance(requireContext());
         new AssetsAsync.RetrieveTask(this).execute();
+    }
+
+    private void searchByName(String query){
+        filteredAssets = assets.stream()
+                .filter(asset -> asset.getName().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        adapter.updateData(filteredAssets);
+    }
+
+    private void searchByDesc(String query){
+        filteredAssets = assets.stream()
+                .filter(asset -> asset.getDescription().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        adapter.updateData(filteredAssets);
     }
 
 

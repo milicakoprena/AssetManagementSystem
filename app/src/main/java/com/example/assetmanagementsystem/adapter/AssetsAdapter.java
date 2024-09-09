@@ -35,6 +35,11 @@ public class AssetsAdapter extends RecyclerView.Adapter<AssetsAdapter.BeanHolder
         layoutInflater = LayoutInflater.from(context);
     }
 
+    public void updateData(List<Asset> newAssetList) {
+        this.list = newAssetList;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public BeanHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

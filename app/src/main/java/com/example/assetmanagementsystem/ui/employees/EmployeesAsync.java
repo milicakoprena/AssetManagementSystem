@@ -34,6 +34,8 @@ public class EmployeesAsync {
             if (fragment != null && employees != null) {
                 fragment.employees.clear();
                 fragment.employees.addAll(employees);
+                fragment.filteredEmployees.clear();
+                fragment.filteredEmployees.addAll(employees);
                 fragment.employeesAdapter.notifyDataSetChanged();
             }
         }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -22,6 +23,7 @@ import com.example.assetmanagementsystem.databinding.FragmentEmployeesBinding;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEmployeeItemClick {
 
@@ -29,7 +31,10 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
     private RecyclerView recyclerView;
     protected AssetDatabase assetDatabase;
     protected List<Employee> employees;
+    protected List<Employee> filteredEmployees;
     protected EmployeesAdapter employeesAdapter;
+    private SearchView searchEmployeeName;
+    private SearchView searchEmployeeEmail;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -52,11 +57,61 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         employees = new ArrayList<>();
+        filteredEmployees = new ArrayList<>();
 
-        employeesAdapter = new EmployeesAdapter(employees, requireContext(), this);
+        employeesAdapter = new EmployeesAdapter(filteredEmployees, requireContext(), this);
         recyclerView.setAdapter(employeesAdapter);
 
+        searchEmployeeName = view.findViewById(R.id.search_employeeName);
+        searchEmployeeName.setIconifiedByDefault(false);
+        searchEmployeeName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByName(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByName(newText);
+                return false;
+            }
+        });
+
+        searchEmployeeEmail = view.findViewById(R.id.search_employeeEmail);
+        searchEmployeeEmail.setIconifiedByDefault(false);
+        searchEmployeeEmail.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByEmail(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByEmail(newText);
+                return false;
+            }
+        });
+
         displayList();
+    }
+
+    private void searchByName(String query) {
+        filteredEmployees = employees.stream()
+                .filter(employee -> (employee.getFirstName().toLowerCase() + " " + employee.getLastName().toLowerCase())
+                        .contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        employeesAdapter.updateData(filteredEmployees);
+    }
+
+    private void searchByEmail(String query) {
+        filteredEmployees = employees.stream()
+                .filter(employee -> employee.getEmail().toLowerCase().contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        employeesAdapter.updateData(filteredEmployees);
     }
 
     private void displayList() {

@@ -36,6 +36,8 @@ public class LocationsAsync {
             if (fragment != null && locations != null) {
                 fragment.locations.clear();
                 fragment.locations.addAll(locations);
+                fragment.filteredLocations.clear();
+                fragment.filteredLocations.addAll(locations);
                 fragment.locationsAdapter.notifyDataSetChanged();
 
                 if (fragment.googleMap != null) {

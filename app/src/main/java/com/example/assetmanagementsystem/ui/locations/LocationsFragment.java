@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -31,6 +32,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LocationsFragment extends Fragment implements LocationsAdapter.OnLocationItemClick {
 
@@ -39,7 +41,9 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
     private RecyclerView recyclerView;
     protected AssetDatabase assetDatabase;
     protected List<Location> locations;
+    protected List<Location> filteredLocations;
     protected LocationsAdapter locationsAdapter;
+    private SearchView searchLocationName;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -59,8 +63,9 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
         recyclerView = view.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         locations = new ArrayList<>();
+        filteredLocations = new ArrayList<>();
 
-        locationsAdapter = new LocationsAdapter(locations, requireContext(), this);
+        locationsAdapter = new LocationsAdapter(filteredLocations, requireContext(), this);
         recyclerView.setAdapter(locationsAdapter);
 
 
@@ -80,6 +85,31 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
                 });
             }
         });
+
+        searchLocationName = view.findViewById(R.id.search_locationName);
+        searchLocationName.setIconifiedByDefault(false);
+        searchLocationName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByName(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByName(newText);
+                return false;
+            }
+        });
+    }
+
+    private void searchByName(String query) {
+        filteredLocations = locations.stream()
+                .filter(location -> location.getName().toLowerCase()
+                        .contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        locationsAdapter.updateData(filteredLocations);
     }
 
     protected void showMarkers() {

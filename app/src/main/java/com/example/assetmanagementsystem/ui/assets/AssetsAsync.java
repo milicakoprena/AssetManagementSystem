@@ -48,6 +48,8 @@ public class AssetsAsync {
             if (fragment != null && assets != null) {
                 fragment.assets.clear();
                 fragment.assets.addAll(assets);
+                fragment.filteredAssets.clear();
+                fragment.filteredAssets.addAll(assets);
                 fragment.adapter.notifyDataSetChanged();
             }
         }

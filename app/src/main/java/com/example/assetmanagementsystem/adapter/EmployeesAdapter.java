@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assetmanagementsystem.R;
+import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.assetdb.model.Employee;
 
 import java.util.List;
@@ -27,6 +28,11 @@ public class EmployeesAdapter extends RecyclerView.Adapter<EmployeesAdapter.Bean
         this.context = context;
         this.onEmployeeItemClick = onEmployeeItemClick;
         layoutInflater = LayoutInflater.from(context);
+    }
+
+    public void updateData(List<Employee> newEmployeeList) {
+        this.list = newEmployeeList;
+        notifyDataSetChanged();
     }
 
     @NonNull

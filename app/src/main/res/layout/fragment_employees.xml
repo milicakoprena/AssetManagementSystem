@@ -14,6 +14,26 @@
         app:layout_constraintTop_toTopOf="parent"
         android:padding="20dp"
         android:background="@color/primary_100">
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_employeeName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="20dp"
+            app:queryHint="@string/search_by_name"
+            android:imeOptions="actionSearch"
+            android:layout_marginBottom="15dp"
+            />
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_employeeEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:layout_editor_absoluteX="20dp"
+            tools:layout_editor_absoluteY="20dp"
+            app:queryHint="@string/search_by_email"
+            android:imeOptions="actionSearch"
+            android:layout_marginBottom="15dp"
+            />
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"

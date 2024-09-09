@@ -252,6 +252,8 @@ public class InventoryAsync {
             if (fragment != null && inventoryDetails != null) {
                 fragment.inventoryDetails.clear();
                 fragment.inventoryDetails.addAll(inventoryDetails);
+                fragment.filteredInventoryDetails.clear();
+                fragment.filteredInventoryDetails.addAll(inventoryDetails);
                 fragment.inventoryAdapter.notifyDataSetChanged();
             }
         }

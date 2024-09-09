@@ -1,6 +1,7 @@
 package com.example.assetmanagementsystem.ui.inventory;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
@@ -29,6 +30,7 @@ import com.example.assetmanagementsystem.ui.employees.EmployeesAsync;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class InventoryFragment extends Fragment implements InventoryAdapter.OnInventoryItemClick {
 
@@ -36,8 +38,11 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
     private RecyclerView recyclerView;
     protected AssetDatabase assetDatabase;
     protected List<InventoryDetails> inventoryDetails;
+    protected List<InventoryDetails> filteredInventoryDetails;
     protected InventoryAdapter inventoryAdapter;
-
+    private SearchView searchAssetName;
+    private SearchView searchNewEmployee;
+    private SearchView searchNewLocation;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,13 +57,89 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
         recyclerView = root.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         inventoryDetails = new ArrayList<>();
+        filteredInventoryDetails = new ArrayList<>();
 
-        inventoryAdapter = new InventoryAdapter(inventoryDetails, requireContext(), this);
+        inventoryAdapter = new InventoryAdapter(filteredInventoryDetails, requireContext(), this);
         recyclerView.setAdapter(inventoryAdapter);
+
+        searchAssetName = root.findViewById(R.id.search_assetName);
+        searchAssetName.setIconifiedByDefault(false);
+        searchAssetName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByName(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByName(newText);
+                return false;
+            }
+        });
+
+        searchNewEmployee = root.findViewById(R.id.search_newEmployee);
+        searchNewEmployee.setIconifiedByDefault(false);
+        searchNewEmployee.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByEmployee(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByEmployee(newText);
+                return false;
+            }
+        });
+
+        searchNewLocation = root.findViewById(R.id.search_newLocation);
+        searchNewLocation.setIconifiedByDefault(false);
+        searchNewLocation.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchByLocation(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                searchByLocation(newText);
+                return false;
+            }
+        });
 
         displayList();
 
         return root;
+    }
+
+    private void searchByName(String query) {
+        filteredInventoryDetails = inventoryDetails.stream()
+                .filter(inventory -> inventory.getAsset().getName().toLowerCase()
+                        .contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        inventoryAdapter.updateData(filteredInventoryDetails);
+    }
+
+    private void searchByEmployee(String query) {
+        filteredInventoryDetails = inventoryDetails.stream()
+                .filter(inventory -> inventory.getNewEmployee().toLowerCase()
+                        .contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        inventoryAdapter.updateData(filteredInventoryDetails);
+    }
+
+    private void searchByLocation(String query) {
+        filteredInventoryDetails = inventoryDetails.stream()
+                .filter(inventory -> inventory.getNewLocation().toLowerCase()
+                        .contains(query.toLowerCase()))
+                .collect(Collectors.toList());
+
+        inventoryAdapter.updateData(filteredInventoryDetails);
     }
 
     private void displayList() {
