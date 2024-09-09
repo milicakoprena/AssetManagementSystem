@@ -34,6 +34,7 @@
     <string name="select_category">Select category</string>
     <string name="select_employee">Select employee</string>
     <string name="select_location">Select location</string>
+    <string name="select_language">Select language</string>
 
     <string name="button_add_employee">Add employee</string>
     <string name="button_add_asset">Add asset</string>
@@ -55,4 +56,56 @@
     <string name="search_by_email">Search by email</string>
     <string name="search_by_new_employee">Search by new employee</string>
     <string name="search_by_new_location">Search by new location</string>
+
+    <string name="english">English</string>
+    <string name="serbian">Serbian</string>
+
+    <string name="date">Date</string>
+    <string name="update_asset">Update asset</string>
+    <string name="missing_fields">Some fields are missing!</string>
+    <string name="camera_denied">Camera permission denied!</string>
+    <string name="images_denied">Permission denied to read images!</string>
+    <string name="scan_barcode">Scan barcode</string>
+    <string name="photo_selected">Photo selected from gallery!</string>
+    <string name="photo_captured">Photo captured from camera!</string>
+    <string name="cancelled">Cancelled!</string>
+    <string name="asset_added">Asset added successfully!</string>
+    <string name="asset_updated">Asset updated successfully!</string>
+    <string name="upload_yes">Upload successful!</string>
+    <string name="upload_no">Upload failed!</string>
+    <string name="update_asset_q">Do you want to update asset</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="delete_asset_q">Do you want to delete asset</string>
+    <string name="asset_deleted">Asset deleted!</string>
+    <string name="all_fields">All fields are required!</string>
+    <string name="employee_deleted">Employee deleted!</string>
+    <string name="employee_added">Employee added successfully!</string>
+    <string name="employee_updated">Employee updated successfully!</string>
+    <string name="update_employee_q">Do you want to update employee</string>
+    <string name="delete_employee_q">Do you want to delete employee</string>
+    <string name="enter_barcode">Enter asset barcode!</string>
+    <string name="asset">Asset</string>
+    <string name="found">found</string>
+    <string name="asset_not_found">Asset not found!</string>
+    <string name="inv_added_asset_updated">Inventory added and asset updated successfully!</string>
+    <string name="transaction_fail">Transaction failed!</string>
+    <string name="inv_updated_asset_updated">Inventory updated and asset updated successfully!</string>
+    <string name="inv_deleted">Inventory deleted!</string>
+    <string name="update_inv_q">Do you want to update inventory?</string>
+    <string name="delete_inv_q">Do you want to delete inventory?</string>
+    <string name="add_new_location">Add New Location</string>
+    <string name="location_name_empty">Location name cannot be empty!</string>
+    <string name="invalid_coordinates">Location coordinates are invalid!</string>
+    <string name="cancel">Cancel</string>
+    <string name="get_location_fail">Unable to retrieve location!</string>
+    <string name="location_denied">Location permission denied!</string>
+    <string name="assets_location">Assets at location</string>
+    <string name="location_deleted">Location deleted!</string>
+    <string name="location_updated">Location updated successfully!</string>
+    <string name="location_added">Location added successfully!</string>
+    <string name="delete_location_q">Do you want to delete location</string>
+    <string name="update_location">Update Location</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
 </resources>

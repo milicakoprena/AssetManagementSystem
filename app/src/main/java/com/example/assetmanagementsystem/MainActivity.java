@@ -3,8 +3,6 @@ package com.example.assetmanagementsystem;
 import android.os.Bundle;
 import android.view.Menu;
 
-import com.example.assetmanagementsystem.assetdb.AssetDatabase;
-import com.example.assetmanagementsystem.assetdb.dao.EmployeeDao;
 import com.google.android.material.navigation.NavigationView;
 
 import androidx.navigation.NavController;

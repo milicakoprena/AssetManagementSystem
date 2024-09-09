@@ -50,7 +50,7 @@ public class AddEmployeeFragment extends Fragment {
                             employee.setEmail(et_email.getText().toString());
                             new EmployeesAsync.UpdateTask(AddEmployeeFragment.this, employee).execute();
                         } else
-                            Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -64,7 +64,7 @@ public class AddEmployeeFragment extends Fragment {
                         employee = new Employee(et_firstName.getText().toString(), et_lastName.getText().toString(), et_email.getText().toString());
                         new EmployeesAsync.InsertTask(AddEmployeeFragment.this, employee).execute();
                     } else
-                        Toast.makeText(requireContext(), "All fields are required!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.all_fields), Toast.LENGTH_SHORT).show();
                 }
             });
         }

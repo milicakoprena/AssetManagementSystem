@@ -30,8 +30,7 @@ public abstract class AssetDatabase extends RoomDatabase {
     public abstract InventoryAssetDao getInventoryAssetDao();
     private static AssetDatabase assetDb;
 
-    // synchronized is use to avoid concurrent access in multithred environment
-    public static /*synchronized*/ AssetDatabase getInstance(Context context) {
+    public static AssetDatabase getInstance(Context context) {
         if (null == assetDb) {
             assetDb = buildDatabaseInstance(context);
         }

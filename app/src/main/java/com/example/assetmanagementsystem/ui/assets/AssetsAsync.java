@@ -158,7 +158,7 @@ public class AssetsAsync {
         protected void onPostExecute(Boolean bool) {
             AddAssetFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Asset added successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.asset_added), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_asset_to_nav_assets);
             }
@@ -197,7 +197,7 @@ public class AssetsAsync {
         protected void onPostExecute(Boolean bool) {
             AddAssetFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Asset updated successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.asset_updated), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_asset_to_nav_assets);
             }
@@ -217,11 +217,11 @@ public class AssetsAsync {
 
             uploadTask
                     .addOnSuccessListener(taskSnapshot -> {
-                        Toast.makeText(fragment.requireContext(), "Upload successful!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(fragment.requireContext(), fragment.getString(R.string.upload_yes), Toast.LENGTH_SHORT).show();
                         taskCompletionSource.setResult(null);
                     })
                     .addOnFailureListener(e -> {
-                        Toast.makeText(fragment.requireContext(), "Upload failed!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(fragment.requireContext(), fragment.getString(R.string.upload_no), Toast.LENGTH_SHORT).show();
                         taskCompletionSource.setException(e);
                     });
         } else {

@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assetmanagementsystem.R;
-import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.assetdb.model.Location;
 
 import java.util.List;

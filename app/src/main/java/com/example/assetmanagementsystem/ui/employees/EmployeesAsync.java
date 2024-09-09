@@ -60,7 +60,7 @@ public class EmployeesAsync {
         protected void onPostExecute(Void aVoid) {
             reference.get().employees.remove(pos);
             reference.get().employeesAdapter.notifyItemRemoved(pos);
-            Toast.makeText(reference.get().requireContext(), "Employee deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(reference.get().requireContext(), reference.get().getString(R.string.employee_deleted), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -88,7 +88,7 @@ public class EmployeesAsync {
         protected void onPostExecute(Boolean bool) {
             AddEmployeeFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Employee added successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.employee_added), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_employee_to_nav_employees);
             }
@@ -118,7 +118,7 @@ public class EmployeesAsync {
         protected void onPostExecute(Boolean bool) {
             AddEmployeeFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Employee updated successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.employee_updated), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_employee_to_nav_employees);
             }

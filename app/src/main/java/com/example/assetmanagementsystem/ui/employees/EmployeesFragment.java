@@ -122,8 +122,8 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
     @Override
     public void onEmployeeClick(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to update employee " + employees.get(pos).getFirstName() + "?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.update_employee_q) + " " + employees.get(pos).getFirstName() + "?")
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             Bundle bundle = new Bundle();
@@ -141,8 +141,8 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
     @Override
     public void deleteEmployee(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to delete employee " + employees.get(pos).getFirstName() + "?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.delete_employee_q) + " " + employees.get(pos).getFirstName() + "?")
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             new EmployeesAsync.DeleteTask(this, pos).execute();

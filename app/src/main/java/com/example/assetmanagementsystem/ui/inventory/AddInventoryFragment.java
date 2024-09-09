@@ -1,7 +1,6 @@
 package com.example.assetmanagementsystem.ui.inventory;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -18,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -27,15 +25,12 @@ import android.widget.Toast;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
-import com.example.assetmanagementsystem.assetdb.enums.AssetCategoryEnum;
 import com.example.assetmanagementsystem.assetdb.helpers.EmployeeSpinnerItem;
-import com.example.assetmanagementsystem.assetdb.helpers.InventoryDetails;
 import com.example.assetmanagementsystem.assetdb.helpers.LocationSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.assetdb.model.Inventory;
 import com.example.assetmanagementsystem.glide.GlideApp;
-import com.example.assetmanagementsystem.ui.assets.AddAssetFragment;
-import com.example.assetmanagementsystem.ui.assets.AssetsAsync;
+import com.example.assetmanagementsystem.util.CameraUtil;
 import com.example.assetmanagementsystem.util.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.storage.FirebaseStorage;
@@ -43,7 +38,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,7 +157,7 @@ public class AddInventoryFragment extends Fragment {
 
                             new InventoryAsync.UpdateTask(AddInventoryFragment.this, inventory, asset).execute();
                         } else
-                            Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.missing_fields), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -199,7 +193,7 @@ public class AddInventoryFragment extends Fragment {
                             asset.setLocationId(selectedLocationItem.getLocationId());
                         new InventoryAsync.InsertTask(AddInventoryFragment.this, inventory, asset).execute();
                     } else
-                        Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.missing_fields), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -225,7 +219,7 @@ public class AddInventoryFragment extends Fragment {
     private void findAssetById(String barcode) {
         if (!barcode.isEmpty())
             new InventoryAsync.RetrieveAssetByIdTask(this, Long.parseLong(barcode)).execute();
-        else Toast.makeText(requireContext(), "Enter asset barcode!", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(requireContext(), getString(R.string.enter_barcode), Toast.LENGTH_SHORT).show();
     }
 
     private void displayLocations() {
@@ -243,24 +237,18 @@ public class AddInventoryFragment extends Fragment {
             requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_QR);
             return;
         }
-        startScanning();
+        CameraUtil.startScanning(this);
     }
 
-    private void startScanning() {
-        IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
-        intentIntegrator.setOrientationLocked(true);
-        intentIntegrator.initiateScan();
-    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_QR) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startScanning();
+                CameraUtil.startScanning(this);
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.camera_denied), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -270,7 +258,7 @@ public class AddInventoryFragment extends Fragment {
         IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if (intentResult != null) {
             if (intentResult.getContents() == null) {
-                Toast.makeText(getContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
             } else {
                 editTextBarcode.setText(intentResult.getContents());
             }

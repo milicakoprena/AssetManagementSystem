@@ -86,7 +86,7 @@ public class LocationsAsync {
 
         private void showAssetsDialog(LocationsFragment fragment, Map<Long, String> assetMap) {
             AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getContext());
-            builder.setTitle("Assets at location " + locationName);
+            builder.setTitle(fragment.getString(R.string.assets_location) + " " + locationName);
             List<String> assetDetails = new ArrayList<>();
             for (Map.Entry<Long, String> entry : assetMap.entrySet()) {
                 String assetDetail = entry.getKey() + " - " + entry.getValue();
@@ -101,7 +101,7 @@ public class LocationsAsync {
                 }
             });
 
-            builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+            builder.setNegativeButton(fragment.getString(R.string.cancel), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
@@ -130,7 +130,7 @@ public class LocationsAsync {
         protected void onPostExecute(Void aVoid) {
             reference.get().locations.remove(pos);
             reference.get().locationsAdapter.notifyItemRemoved(pos);
-            Toast.makeText(reference.get().requireContext(), "Location deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(reference.get().requireContext(), reference.get().getString(R.string.location_deleted), Toast.LENGTH_SHORT).show();
             reference.get().showMarkers();
         }
     }
@@ -161,7 +161,7 @@ public class LocationsAsync {
         protected void onPostExecute(Boolean bool) {
             LocationsFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Location updated successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.location_updated), Toast.LENGTH_SHORT).show();
                 locationsAdapter.notifyDataSetChanged();
             }
         }
@@ -191,7 +191,7 @@ public class LocationsAsync {
         protected void onPostExecute(Boolean bool) {
             AddLocationFragment fragment = fragmentReference.get();
             if (fragment != null && bool) {
-                Toast.makeText(fragment.requireContext(), "Location added successfully", Toast.LENGTH_SHORT).show();
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.location_added), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_location_to_nav_locations);
             }

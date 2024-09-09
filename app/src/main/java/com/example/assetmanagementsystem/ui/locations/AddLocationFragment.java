@@ -89,7 +89,7 @@ public class AddLocationFragment extends Fragment {
 
     private void addLocationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Add New Location");
+        builder.setTitle(getString(R.string.add_new_location));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_location, null);
@@ -102,18 +102,18 @@ public class AddLocationFragment extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 locationName = inputName.getText().toString().trim();
                 if (locationName.isEmpty()) {
-                    Toast.makeText(requireContext(), "Location name cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.location_name_empty), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (locationLatitude == 0.0 || locationLongitude == 0.0) {
-                    Toast.makeText(requireContext(), "Location coordinates are invalid", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.invalid_coordinates), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 Location location = new Location(locationName, locationLatitude, locationLongitude);
                 new LocationsAsync.InsertTask(AddLocationFragment.this, location).execute();
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();
@@ -153,7 +153,7 @@ public class AddLocationFragment extends Fragment {
                             LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
                             handleMapClick(myLocation);
                         } else {
-                            Toast.makeText(requireContext(), "Unable to retrieve location", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.get_location_fail), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -166,7 +166,7 @@ public class AddLocationFragment extends Fragment {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 checkLocationPermissionAndShowMyLocation();
             } else {
-                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.location_denied ), Toast.LENGTH_SHORT).show();
             }
         }
     }

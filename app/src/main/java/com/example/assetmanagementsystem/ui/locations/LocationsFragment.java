@@ -162,8 +162,8 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
     @Override
     public void deleteLocation(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to delete location " + locations.get(pos).getName() + "?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.delete_location_q) + " " + locations.get(pos).getName() + "?")
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             new LocationsAsync.DeleteTask(this, pos).execute();
@@ -176,7 +176,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
 
     private void addLocationDialog(Location location) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setTitle("Update Location");
+        builder.setTitle(getString(R.string.update_location));
 
         LayoutInflater inflater = requireActivity().getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.dialog_add_location, null);
@@ -191,14 +191,14 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
                 String locationName = inputName.getText().toString().trim();
 
                 if (locationName.isEmpty()) {
-                    Toast.makeText(requireContext(), "Location name cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(requireContext(), getString(R.string.location_name_empty), Toast.LENGTH_SHORT).show();
                 } else {
                     location.setName(locationName);
                     new LocationsAsync.UpdateTask(LocationsFragment.this, location, locationsAdapter).execute();
                 }
             }
         });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.cancel();

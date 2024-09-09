@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.assetdb.helpers.InventoryDetails;
-import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.glide.GlideApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;

@@ -1,7 +1,6 @@
 package com.example.assetmanagementsystem.ui.inventory;
 
 import android.os.AsyncTask;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -20,10 +19,6 @@ import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.assetdb.model.Inventory;
 import com.example.assetmanagementsystem.assetdb.model.Location;
-import com.example.assetmanagementsystem.ui.assets.AddAssetFragment;
-import com.example.assetmanagementsystem.ui.employees.EmployeesFragment;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 
 import java.lang.ref.WeakReference;
 import java.util.List;
@@ -109,7 +104,8 @@ public class InventoryAsync {
             AddInventoryFragment fragment = reference.get();
             if (fragment != null) {
                 if (asset != null) {
-                    Toast.makeText(fragment.requireContext(), "Asset " + asset.getName() + " found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getString(R.string.asset) +
+                            " " + asset.getName() + " " + fragment.getString(R.string.found), Toast.LENGTH_SHORT).show();
                     String employeeName = fragment.employeeItems.stream()
                             .filter(employeeSpinnerItem -> employeeSpinnerItem.getEmployeeId() == asset.getEmployeeId()).findFirst().orElse(null).getName();
                     fragment.twEmployee.append(": " + employeeName);
@@ -132,7 +128,7 @@ public class InventoryAsync {
                         fragment.loadImage(asset.getImageUrl(), imageView);
                     }
                 } else {
-                    Toast.makeText(fragment.requireContext(), "Asset not found", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getText(R.string.asset_not_found), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -169,11 +165,11 @@ public class InventoryAsync {
             AddInventoryFragment fragment = fragmentReference.get();
             if (fragment != null) {
                 if (success) {
-                    Toast.makeText(fragment.requireContext(), "Inventory added and asset updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getString(R.string.inv_added_asset_updated), Toast.LENGTH_SHORT).show();
                     NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                     navController.navigate(R.id.action_nav_add_inventory_to_nav_inventory);
                 } else {
-                    Toast.makeText(fragment.requireContext(), "Transaction failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getString(R.string.transaction_fail), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -209,11 +205,11 @@ public class InventoryAsync {
             AddInventoryFragment fragment = fragmentReference.get();
             if (fragment != null) {
                 if (success) {
-                    Toast.makeText(fragment.requireContext(), "Inventory updated and asset updated successfully", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getString(R.string.inv_updated_asset_updated), Toast.LENGTH_SHORT).show();
                     NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                     navController.navigate(R.id.action_nav_add_inventory_to_nav_inventory);
                 } else {
-                    Toast.makeText(fragment.requireContext(), "Transaction failed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(fragment.requireContext(), fragment.getString(R.string.transaction_fail), Toast.LENGTH_SHORT).show();
                 }
             }
         }
@@ -278,7 +274,7 @@ public class InventoryAsync {
         protected void onPostExecute(Void aVoid) {
             reference.get().inventoryDetails.remove(pos);
             reference.get().inventoryAdapter.notifyItemRemoved(pos);
-            Toast.makeText(reference.get().requireContext(), "Inventory deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(reference.get().requireContext(), reference.get().getString(R.string.inv_deleted), Toast.LENGTH_SHORT).show();
         }
     }
 

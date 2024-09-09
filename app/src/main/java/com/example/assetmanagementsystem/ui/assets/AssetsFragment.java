@@ -12,7 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,22 +19,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.adapter.AssetsAdapter;
-import com.example.assetmanagementsystem.adapter.EmployeesAdapter;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
-import com.example.assetmanagementsystem.assetdb.dao.AssetDao;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
-import com.example.assetmanagementsystem.assetdb.model.Employee;
 import com.example.assetmanagementsystem.databinding.FragmentAssetsBinding;
-import com.example.assetmanagementsystem.ui.employees.EmployeesFragment;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.stream.Collectors;
 
-public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetItemClick{
+public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetItemClick {
 
     private FragmentAssetsBinding binding;
     private RecyclerView recyclerView;
@@ -76,7 +68,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
         searchAssetName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-               searchByName(query);
+                searchByName(query);
 
                 return false;
             }
@@ -115,7 +107,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
         new AssetsAsync.RetrieveTask(this).execute();
     }
 
-    private void searchByName(String query){
+    private void searchByName(String query) {
         filteredAssets = assets.stream()
                 .filter(asset -> asset.getName().toLowerCase().contains(query.toLowerCase()))
                 .collect(Collectors.toList());
@@ -123,7 +115,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
         adapter.updateData(filteredAssets);
     }
 
-    private void searchByDesc(String query){
+    private void searchByDesc(String query) {
         filteredAssets = assets.stream()
                 .filter(asset -> asset.getDescription().toLowerCase().contains(query.toLowerCase()))
                 .collect(Collectors.toList());
@@ -141,8 +133,8 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
     @Override
     public void onAssetClick(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to update asset " + assets.get(pos).getName() + "?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.update_asset_q) + " " + assets.get(pos).getName() + "?")
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             Bundle bundle = new Bundle();
@@ -160,8 +152,8 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
     @Override
     public void deleteAsset(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to delete asset " + assets.get(pos).getName() + "?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.delete_asset_q) + " " + assets.get(pos).getName() + "?")
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             new AsyncTask<Void, Void, Void>() {
@@ -175,7 +167,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
                                 protected void onPostExecute(Void aVoid) {
                                     assets.remove(pos);
                                     adapter.notifyItemRemoved(pos);
-                                    Toast.makeText(requireContext(), "Asset deleted", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(requireContext(), getString(R.string.asset_deleted), Toast.LENGTH_SHORT).show();
                                 }
                             }.execute();
                             break;

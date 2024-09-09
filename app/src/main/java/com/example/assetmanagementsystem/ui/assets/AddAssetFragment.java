@@ -10,11 +10,8 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 
-import android.os.Environment;
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +32,7 @@ import com.example.assetmanagementsystem.assetdb.helpers.EmployeeSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.helpers.LocationSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.glide.GlideApp;
+import com.example.assetmanagementsystem.util.CameraUtil;
 import com.example.assetmanagementsystem.util.Constants;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.FirebaseApp;
@@ -44,14 +42,10 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 
-import java.io.File;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class AddAssetFragment extends Fragment {
@@ -159,10 +153,10 @@ public class AddAssetFragment extends Fragment {
                 LinearLayout layoutBarcode = rootView.findViewById(R.id.layout_barcode);
                 layoutBarcode.setVisibility(View.GONE);
                 TextView twBarcode = rootView.findViewById(R.id.tw_barcode);
-                twBarcode.setText("Barcode: " + asset.getBarcode());
+                twBarcode.setText(getString(R.string.input_barcode) + ": " + asset.getBarcode());
                 TextView twDate = rootView.findViewById(R.id.tw_date);
-                twDate.setText("Date: " + asset.getDateCreated());
-                buttonAdd.setText("UPDATE ASSET");
+                twDate.setText(getString(R.string.date) + ": " + asset.getDateCreated());
+                buttonAdd.setText(getString(R.string.update_asset));
 
                 loadImage(asset.getImageUrl());
                 int defaultPositionCategory = adapter.getPosition(asset.getCategory().getDisplayName());
@@ -188,7 +182,7 @@ public class AddAssetFragment extends Fragment {
 
                             new AssetsAsync.UpdateTask(AddAssetFragment.this, asset).execute();
                         } else
-                            Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(requireContext(), getString(R.string.missing_fields), Toast.LENGTH_SHORT).show();
                     }
                 });
             }
@@ -217,7 +211,7 @@ public class AddAssetFragment extends Fragment {
 
                         new AssetsAsync.InsertTask(AddAssetFragment.this, asset).execute();
                     } else
-                        Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), getString(R.string.missing_fields), Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -259,99 +253,58 @@ public class AddAssetFragment extends Fragment {
                 .into(imageView);
     }
 
+    private void handleScanning() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_QR);
+            return;
+        }
+        CameraUtil.startScanning(this);
+    }
+    private void handleCamera() throws IOException {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_CAMERA);
+            return;
+        }
+        photoUri = CameraUtil.takePhoto(this);
+    }
+    private void handleGallery() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
+            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, Constants.REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES);
+            return;
+        }
+        CameraUtil.openGallery(this);
+    }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == Constants.REQUEST_CODE_PERMISSION_QR) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startScanning();
+                CameraUtil.startScanning(this);
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.camera_denied), Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == Constants.REQUEST_CODE_PERMISSION_CAMERA) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 try {
-                    takePhoto();
+                    photoUri = CameraUtil.takePhoto(this);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
             } else {
-                Toast.makeText(requireContext(), "Camera permission denied", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.camera_denied), Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == Constants.REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                openGallery();
+                CameraUtil.openGallery(this);
             } else {
-                Toast.makeText(requireContext(), "Permission denied to read images", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), getString(R.string.images_denied), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void handleScanning() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_QR);
-            return;
-        }
-        startScanning();
-    }
 
-    private void startScanning() {
-        IntentIntegrator intentIntegrator = IntentIntegrator.forSupportFragment(this);
-        intentIntegrator.setPrompt("Scan a barcode or QR Code");
-        intentIntegrator.setOrientationLocked(true);
-        intentIntegrator.initiateScan();
-    }
-
-    private void handleCamera() throws IOException {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.CAMERA}, Constants.REQUEST_CODE_PERMISSION_CAMERA);
-            return;
-        }
-        takePhoto();
-    }
-
-    private void takePhoto() throws IOException {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
-            File photoFile = createImageFile();
-            if (photoFile != null) {
-                photoUri = FileProvider.getUriForFile(requireContext(),
-                        "com.example.assetmanagementsystem.fileprovider",
-                        photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
-                startActivityForResult(takePictureIntent, Constants.REQUEST_CODE_IMAGE_PICK);
-            }
-        }
-    }
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        File storageDir = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-
-        File imageFile = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
-        );
-
-        return imageFile;
-    }
-
-    private void handleGallery() {
-        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.READ_MEDIA_IMAGES) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_MEDIA_IMAGES}, Constants.REQUEST_CODE_PERMISSION_READ_MEDIA_IMAGES);
-            return;
-        }
-        openGallery();
-    }
-
-    private void openGallery() {
-        Intent pickPhotoIntent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(pickPhotoIntent, Constants.REQUEST_CODE_IMAGE_PICK);
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -359,9 +312,9 @@ public class AddAssetFragment extends Fragment {
         if (requestCode == Constants.REQUEST_CODE_IMAGE_PICK && resultCode == Activity.RESULT_OK) {
             if (data != null && data.getData() != null) {
                 photoUri = data.getData();
-                Toast.makeText(getContext(), "Photo selected from gallery!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.photo_selected), Toast.LENGTH_SHORT).show();
             } else if (photoUri != null) {
-                Toast.makeText(getContext(), "Photo captured from camera!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.photo_captured), Toast.LENGTH_SHORT).show();
             }
             if (asset != null) {
                 imageView.setImageURI(photoUri);
@@ -372,7 +325,7 @@ public class AddAssetFragment extends Fragment {
             IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
             if (intentResult != null) {
                 if (intentResult.getContents() == null) {
-                    Toast.makeText(getContext(), "Cancelled!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getString(R.string.cancelled), Toast.LENGTH_SHORT).show();
                 } else {
                     editTextBarcode.setText(intentResult.getContents());
                 }

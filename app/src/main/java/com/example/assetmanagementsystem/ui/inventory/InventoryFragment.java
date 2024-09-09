@@ -1,8 +1,6 @@
 package com.example.assetmanagementsystem.ui.inventory;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
-import androidx.lifecycle.ViewModelProvider;
 
 import android.app.AlertDialog;
 import android.os.Bundle;
@@ -17,16 +15,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.example.assetmanagementsystem.R;
-import com.example.assetmanagementsystem.adapter.EmployeesAdapter;
 import com.example.assetmanagementsystem.adapter.InventoryAdapter;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
 import com.example.assetmanagementsystem.assetdb.helpers.InventoryDetails;
-import com.example.assetmanagementsystem.assetdb.model.Inventory;
 import com.example.assetmanagementsystem.databinding.FragmentInventoryBinding;
-import com.example.assetmanagementsystem.ui.employees.EmployeesAsync;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,8 +150,8 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
     @Override
     public void onInventoryClick(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to update inventory?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.update_inv_q))
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             Bundle bundle = new Bundle();
@@ -175,8 +169,8 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
     @Override
     public void deleteInventory(int pos) {
         new AlertDialog.Builder(requireContext())
-                .setTitle("Do you want to delete inventory?")
-                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                .setTitle(getString(R.string.delete_inv_q))
+                .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
                             new InventoryAsync.DeleteTask(this, pos).execute();

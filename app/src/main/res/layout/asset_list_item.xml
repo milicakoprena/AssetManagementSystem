@@ -72,10 +72,10 @@
                 android:src="@drawable/icon_delete"
                 android:layout_height="35dp"
                 android:layout_width="35dp"
-                android:contentDescription="Delete"
+                android:contentDescription="@string/delete"
                 android:layout_gravity="end|center_vertical"
                 card_view:tint="@color/input_icon_color"
-                android:tooltipText="Delete"/>
+                android:tooltipText="@string/delete"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
