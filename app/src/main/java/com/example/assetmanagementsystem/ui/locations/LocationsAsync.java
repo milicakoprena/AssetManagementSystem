@@ -1,5 +1,7 @@
 package com.example.assetmanagementsystem.ui.locations;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -9,10 +11,14 @@ import androidx.navigation.Navigation;
 
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.adapter.LocationsAdapter;
+import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.assetdb.model.Location;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LocationsAsync {
     protected static class RetrieveTask extends AsyncTask<Void, Void, List<Location>> {
@@ -47,6 +53,64 @@ public class LocationsAsync {
         }
     }
 
+    protected static class RetrieveAssetsByLocationTask extends AsyncTask<Void, Void, List<Asset>> {
+        private WeakReference<LocationsFragment> reference;
+        private long locationId;
+        private String locationName;
+
+        RetrieveAssetsByLocationTask(LocationsFragment fragment, long locationId, String locationName) {
+            reference = new WeakReference<>(fragment);
+            this.locationId = locationId;
+            this.locationName = locationName;
+        }
+
+        @Override
+        protected List<Asset> doInBackground(Void... voids) {
+            if (reference.get() != null)
+                return reference.get().assetDatabase.getAssetDao().findByLocation(locationId);
+            else
+                return null;
+        }
+
+        @Override
+        protected void onPostExecute(List<Asset> assets) {
+            LocationsFragment fragment = reference.get();
+            if (fragment != null && assets != null) {
+                Map<Long, String> assetMap = assets.stream()
+                        .collect(Collectors.toMap(Asset::getBarcode, Asset::getName));
+                fragment.markerAssets.clear();
+                fragment.markerAssets.putAll(assetMap);
+                showAssetsDialog(fragment, fragment.markerAssets);
+            }
+        }
+
+        private void showAssetsDialog(LocationsFragment fragment, Map<Long, String> assetMap) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(fragment.getContext());
+            builder.setTitle("Assets at location " + locationName);
+            List<String> assetDetails = new ArrayList<>();
+            for (Map.Entry<Long, String> entry : assetMap.entrySet()) {
+                String assetDetail = entry.getKey() + " - " + entry.getValue();
+                assetDetails.add(assetDetail);
+            }
+
+            CharSequence[] assetsArray = assetDetails.toArray(new CharSequence[assetDetails.size()]);
+
+            builder.setItems(assetsArray, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                }
+            });
+
+            builder.setNegativeButton("Close", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            builder.show();
+        }
+    }
+
     protected static class DeleteTask extends AsyncTask<Void, Void, Void> {
         private WeakReference<LocationsFragment> reference;
         private int pos;
@@ -55,6 +119,7 @@ public class LocationsAsync {
             reference = new WeakReference<>(fragment);
             this.pos = pos;
         }
+
         @Override
         protected Void doInBackground(Void... voids) {
             reference.get().assetDatabase.getLocationDao().deleteLocation(reference.get().locations.get(pos));

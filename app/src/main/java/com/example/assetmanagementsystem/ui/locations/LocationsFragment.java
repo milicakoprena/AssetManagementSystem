@@ -28,10 +28,13 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class LocationsFragment extends Fragment implements LocationsAdapter.OnLocationItemClick {
@@ -44,6 +47,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
     protected List<Location> filteredLocations;
     protected LocationsAdapter locationsAdapter;
     private SearchView searchLocationName;
+    protected Map<Long,String> markerAssets;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,6 +72,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
         locationsAdapter = new LocationsAdapter(filteredLocations, requireContext(), this);
         recyclerView.setAdapter(locationsAdapter);
 
+        markerAssets = new HashMap<>();
 
         SupportMapFragment supportMapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.google_map);
         supportMapFragment.getMapAsync(new OnMapReadyCallback() {
@@ -83,8 +88,21 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
 
                     }
                 });
+                googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker) {
+                        long locationId = (long) marker.getTag();
+                        String locationName = locations.stream()
+                                .filter(location -> location.getLocationId() == locationId)
+                                .findFirst().orElse(null).getName();
+                        new LocationsAsync.RetrieveAssetsByLocationTask(LocationsFragment.this, locationId, locationName).execute();
+
+                        return true;
+                    }
+                });
             }
         });
+
 
         searchLocationName = view.findViewById(R.id.search_locationName);
         searchLocationName.setIconifiedByDefault(false);
@@ -118,7 +136,8 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
             MarkerOptions markerOptions = new MarkerOptions();
             markerOptions.position(new LatLng(location.getLatitude(), location.getLongitude()));
             markerOptions.title(location.getName());
-            googleMap.addMarker(markerOptions);
+            Marker marker = googleMap.addMarker(markerOptions);
+            marker.setTag(location.getLocationId());
         }
     }
 
@@ -147,7 +166,7 @@ public class LocationsFragment extends Fragment implements LocationsAdapter.OnLo
                 .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
-                            new LocationsAsync.DeleteTask(this,pos).execute();
+                            new LocationsAsync.DeleteTask(this, pos).execute();
                             break;
                         case 1:
                             break;

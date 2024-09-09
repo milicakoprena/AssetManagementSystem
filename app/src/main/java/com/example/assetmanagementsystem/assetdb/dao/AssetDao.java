@@ -30,4 +30,7 @@ public interface AssetDao {
 
     @Query("SELECT * FROM " + Constants.TABLE_NAME_ASSET + " WHERE barcode = :barcode")
     Asset findById(long barcode);
+
+    @Query("SELECT * FROM " + Constants.TABLE_NAME_ASSET + " WHERE location_id = :locationId")
+    List<Asset> findByLocation(long locationId);
 }
