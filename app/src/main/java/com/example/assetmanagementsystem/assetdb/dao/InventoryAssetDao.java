@@ -14,6 +14,9 @@ public interface InventoryAssetDao {
     long insertInventory(Inventory inventory);
 
     @Update
+    int updateInventory(Inventory inventory);
+
+    @Update
     int updateAsset(Asset asset);
 
     @Transaction
@@ -23,5 +26,13 @@ public interface InventoryAssetDao {
         int assetUpdateResult = updateAsset(asset);
 
         return inventoryInsertResult > 0 && assetUpdateResult > 0;
+    }
+
+    @Transaction
+    default boolean updateInventoryAndUpdateAsset(Inventory inventory, Asset asset) {
+        int inventoryUpdateResult = updateInventory(inventory);
+        int assetUpdateResult = updateAsset(asset);
+
+        return inventoryUpdateResult > 0 && assetUpdateResult > 0;
     }
 }

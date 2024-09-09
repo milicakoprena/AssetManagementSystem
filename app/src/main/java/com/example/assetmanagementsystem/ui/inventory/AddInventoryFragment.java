@@ -17,22 +17,29 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.request.RequestOptions;
 import com.example.assetmanagementsystem.R;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
 import com.example.assetmanagementsystem.assetdb.enums.AssetCategoryEnum;
 import com.example.assetmanagementsystem.assetdb.helpers.EmployeeSpinnerItem;
+import com.example.assetmanagementsystem.assetdb.helpers.InventoryDetails;
 import com.example.assetmanagementsystem.assetdb.helpers.LocationSpinnerItem;
 import com.example.assetmanagementsystem.assetdb.model.Asset;
 import com.example.assetmanagementsystem.assetdb.model.Inventory;
+import com.example.assetmanagementsystem.glide.GlideApp;
 import com.example.assetmanagementsystem.ui.assets.AddAssetFragment;
 import com.example.assetmanagementsystem.ui.assets.AssetsAsync;
 import com.example.assetmanagementsystem.util.Constants;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
@@ -62,6 +69,7 @@ public class AddInventoryFragment extends Fragment {
 
     protected Asset asset;
     private Inventory inventory;
+    protected boolean update = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -103,71 +111,120 @@ public class AddInventoryFragment extends Fragment {
         employeeItems = new ArrayList<>();
         displayEmployees();
 
-        buttonScan = rootView.findViewById(R.id.button_scan);
-        editTextBarcode = rootView.findViewById(R.id.et_barcode);
-        buttonScan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                handleScanning();
-            }
-        });
-
-        buttonFind = rootView.findViewById(R.id.button_find);
-        buttonFind.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                findAssetById();
-            }
-        });
 
         swEmployee = rootView.findViewById(R.id.sw_employee);
         swLocation = rootView.findViewById(R.id.sw_location);
 
         swEmployee.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                int defaultPositionEmployee = employeeAdapter.getPosition(employeeItems.stream()
-                        .filter(employeeSpinnerItem -> employeeSpinnerItem.getEmployeeId() == asset.getEmployeeId()).findFirst().orElse(null));
-                if (defaultPositionEmployee != -1) {
-                    spinnerEmployee.setSelection(defaultPositionEmployee);
+            if (asset != null) {
+                if (isChecked) {
+                    int defaultPositionEmployee = employeeAdapter.getPosition(employeeItems.stream()
+                            .filter(employeeSpinnerItem -> employeeSpinnerItem.getEmployeeId() == asset.getEmployeeId()).findFirst().orElse(null));
+                    if (defaultPositionEmployee != -1) {
+                        spinnerEmployee.setSelection(defaultPositionEmployee);
+                    }
                 }
             }
         });
 
         swLocation.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                int defaultPositionLocation = locationsAdapter.getPosition(locationItems.stream()
-                        .filter(locationSpinnerItem -> locationSpinnerItem.getLocationId() == asset.getLocationId()).findFirst().orElse(null));
-                if (defaultPositionLocation != -1) {
-                    spinnerLocation.setSelection(defaultPositionLocation);
+            if (asset != null) {
+                if (isChecked) {
+                    int defaultPositionLocation = locationsAdapter.getPosition(locationItems.stream()
+                            .filter(locationSpinnerItem -> locationSpinnerItem.getLocationId() == asset.getLocationId()).findFirst().orElse(null));
+                    if (defaultPositionLocation != -1) {
+                        spinnerLocation.setSelection(defaultPositionLocation);
+                    }
                 }
             }
         });
 
         buttonAdd = rootView.findViewById(R.id.button_add);
-        buttonAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!editTextBarcode.getText().toString().isEmpty()
-                        && selectedLocationItem != null && selectedEmployeeItem != null) {
-                    inventory = new Inventory(Long.parseLong(editTextBarcode.getText().toString()), asset.getEmployeeId(),
-                            selectedEmployeeItem.getEmployeeId(), asset.getLocationId(),
-                            selectedLocationItem.getLocationId());
-                    if(asset.getEmployeeId() != selectedEmployeeItem.getEmployeeId())
-                        asset.setEmployeeId(selectedEmployeeItem.getEmployeeId());
-                    if(asset.getLocationId() != selectedLocationItem.getLocationId())
-                        asset.setLocationId(selectedLocationItem.getLocationId());
-                    new InventoryAsync.InsertTask(AddInventoryFragment.this, inventory, asset).execute();
-                } else
-                    Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
-            }
-        });
 
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            inventory = bundle.getParcelable("inventory");
+            if (inventory != null) {
+                update = true;
+                findAssetById(String.valueOf(inventory.getBarcode()));
+
+                buttonAdd.setText("Update inventory");
+                buttonAdd.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if (asset != null && selectedEmployeeItem != null && selectedLocationItem != null) {
+                            inventory.setOldEmployeeId(asset.getEmployeeId());
+                            inventory.setOldLocationId(asset.getLocationId());
+                            inventory.setNewEmployeeId(selectedEmployeeItem.getEmployeeId());
+                            inventory.setNewLocationId(selectedLocationItem.getLocationId());
+
+                            asset.setEmployeeId(selectedEmployeeItem.getEmployeeId());
+                            asset.setLocationId(selectedLocationItem.getLocationId());
+
+                            new InventoryAsync.UpdateTask(AddInventoryFragment.this, inventory, asset).execute();
+                        } else
+                            Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        } else {
+            buttonScan = rootView.findViewById(R.id.button_scan);
+            editTextBarcode = rootView.findViewById(R.id.et_barcode);
+            buttonScan.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    handleScanning();
+                }
+            });
+
+            buttonFind = rootView.findViewById(R.id.button_find);
+            buttonFind.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String barcode = editTextBarcode.getText().toString();
+                    findAssetById(barcode);
+                }
+            });
+            buttonAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (!editTextBarcode.getText().toString().isEmpty()
+                            && selectedLocationItem != null && selectedEmployeeItem != null) {
+                        inventory = new Inventory(Long.parseLong(editTextBarcode.getText().toString()), asset.getEmployeeId(),
+                                selectedEmployeeItem.getEmployeeId(), asset.getLocationId(),
+                                selectedLocationItem.getLocationId());
+                        if (asset.getEmployeeId() != selectedEmployeeItem.getEmployeeId())
+                            asset.setEmployeeId(selectedEmployeeItem.getEmployeeId());
+                        if (asset.getLocationId() != selectedLocationItem.getLocationId())
+                            asset.setLocationId(selectedLocationItem.getLocationId());
+                        new InventoryAsync.InsertTask(AddInventoryFragment.this, inventory, asset).execute();
+                    } else
+                        Toast.makeText(requireContext(), "Some fields are missing!", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
         return rootView;
     }
 
-    private void findAssetById() {
-        if (!editTextBarcode.getText().toString().isEmpty())
-            new InventoryAsync.RetrieveAssetByIdTask(this, Long.parseLong(editTextBarcode.getText().toString())).execute();
+
+    protected void loadImage(String imageUrl, ImageView imageView) {
+        if (imageView != null) {
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(imageUrl);
+            RequestOptions requestOptions = new RequestOptions()
+                    .placeholder(R.drawable.placeholder)
+                    .error(R.drawable.placeholder);
+
+            GlideApp.with(this)
+                    .load(storageReference)
+                    .apply(requestOptions)
+                    .into(imageView);
+
+        }
+    }
+
+    private void findAssetById(String barcode) {
+        if (!barcode.isEmpty())
+            new InventoryAsync.RetrieveAssetByIdTask(this, Long.parseLong(barcode)).execute();
         else Toast.makeText(requireContext(), "Enter asset barcode!", Toast.LENGTH_SHORT).show();
     }
 

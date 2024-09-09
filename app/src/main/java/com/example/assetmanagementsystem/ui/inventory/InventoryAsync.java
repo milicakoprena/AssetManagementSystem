@@ -2,7 +2,11 @@ package com.example.assetmanagementsystem.ui.inventory;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.navigation.NavController;
@@ -104,7 +108,7 @@ public class InventoryAsync {
         protected void onPostExecute(Asset asset) {
             AddInventoryFragment fragment = reference.get();
             if (fragment != null) {
-                if(asset!=null){
+                if (asset != null) {
                     Toast.makeText(fragment.requireContext(), "Asset " + asset.getName() + " found", Toast.LENGTH_SHORT).show();
                     String employeeName = fragment.employeeItems.stream()
                             .filter(employeeSpinnerItem -> employeeSpinnerItem.getEmployeeId() == asset.getEmployeeId()).findFirst().orElse(null).getName();
@@ -113,8 +117,21 @@ public class InventoryAsync {
                             .filter(locationSpinnerItem -> locationSpinnerItem.getLocationId() == asset.getLocationId()).findFirst().orElse(null).getName();
                     fragment.twLocation.append(": " + locationName);
                     fragment.asset = asset;
-                }
-                else{
+                    if (fragment.update) {
+                        LinearLayout layoutImageBarcode = fragment.getView().findViewById(R.id.layout_imageBarcode);
+                        LinearLayout layoutBarcode = fragment.getView().findViewById(R.id.layout_barcode);
+                        layoutImageBarcode.setVisibility(View.VISIBLE);
+                        layoutBarcode.setVisibility(View.GONE);
+
+                        TextView twBarcode = fragment.getView().findViewById(R.id.tw_barcode);
+                        TextView twName = fragment.getView().findViewById(R.id.tw_name);
+                        twBarcode.setText(String.valueOf(asset.getBarcode()));
+                        twName.setText(asset.getName());
+
+                        ImageView imageView = fragment.getView().findViewById(R.id.image);
+                        fragment.loadImage(asset.getImageUrl(), imageView);
+                    }
+                } else {
                     Toast.makeText(fragment.requireContext(), "Asset not found", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -162,15 +179,56 @@ public class InventoryAsync {
         }
     }
 
+    protected static class UpdateTask extends AsyncTask<Void, Void, Boolean> {
+        private WeakReference<AddInventoryFragment> fragmentReference;
+        private Inventory inventory;
+        private Asset asset;
+
+        UpdateTask(AddInventoryFragment fragment, Inventory inventory, Asset asset) {
+            fragmentReference = new WeakReference<>(fragment);
+            this.inventory = inventory;
+            this.asset = asset;
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... objs) {
+            AddInventoryFragment fragment = fragmentReference.get();
+            if (fragment != null) {
+                try {
+                    return fragment.assetDatabase.getInventoryAssetDao().updateInventoryAndUpdateAsset(inventory, asset);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean success) {
+            AddInventoryFragment fragment = fragmentReference.get();
+            if (fragment != null) {
+                if (success) {
+                    Toast.makeText(fragment.requireContext(), "Inventory updated and asset updated successfully", Toast.LENGTH_SHORT).show();
+                    NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
+                    navController.navigate(R.id.action_nav_add_inventory_to_nav_inventory);
+                } else {
+                    Toast.makeText(fragment.requireContext(), "Transaction failed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     protected static class RetrieveTask extends AsyncTask<Void, Void, List<InventoryDetails>> {
         private WeakReference<InventoryFragment> reference;
+
         RetrieveTask(InventoryFragment fragment) {
             reference = new WeakReference<>(fragment);
         }
 
         @Override
         protected List<InventoryDetails> doInBackground(Void... voids) {
-            if (reference.get() != null){
+            if (reference.get() != null) {
                 List<Inventory> inventories = reference.get().assetDatabase.getInventoryDao().getInventories();
                 List<InventoryDetails> inventoryDetails = inventories.stream().map(inventory -> {
                     Asset asset = reference.get().assetDatabase.getInventoryDao().getAssetById(inventory.getBarcode());
@@ -178,15 +236,13 @@ public class InventoryAsync {
                     Employee newEmployee = reference.get().assetDatabase.getInventoryDao().getEmployeeById(inventory.getNewEmployeeId());
                     Location oldLocation = reference.get().assetDatabase.getInventoryDao().getLocationById(inventory.getOldLocationId());
                     Location newLocation = reference.get().assetDatabase.getInventoryDao().getLocationById(inventory.getNewLocationId());
-                    return new InventoryDetails(inventory.getInventoryId(), asset,
+                    return new InventoryDetails(inventory, asset,
                             oldEmployee.getFirstName() + " " + oldEmployee.getLastName(),
                             newEmployee.getFirstName() + " " + newEmployee.getLastName(),
                             oldLocation.getName(), newLocation.getName());
                 }).collect(Collectors.toList());
                 return inventoryDetails;
-            }
-
-            else
+            } else
                 return null;
         }
 
@@ -212,7 +268,7 @@ public class InventoryAsync {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            reference.get().assetDatabase.getInventoryDao().deleteInventoryById(reference.get().inventoryDetails.get(pos).getInventoryId());
+            reference.get().assetDatabase.getInventoryDao().deleteInventoryById(reference.get().inventoryDetails.get(pos).getInventory().getInventoryId());
             return null;
         }
 

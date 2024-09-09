@@ -23,6 +23,7 @@ import com.example.assetmanagementsystem.adapter.EmployeesAdapter;
 import com.example.assetmanagementsystem.adapter.InventoryAdapter;
 import com.example.assetmanagementsystem.assetdb.AssetDatabase;
 import com.example.assetmanagementsystem.assetdb.helpers.InventoryDetails;
+import com.example.assetmanagementsystem.assetdb.model.Inventory;
 import com.example.assetmanagementsystem.databinding.FragmentInventoryBinding;
 import com.example.assetmanagementsystem.ui.employees.EmployeesAsync;
 
@@ -73,7 +74,21 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
 
     @Override
     public void onInventoryClick(int pos) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Do you want to update inventory?")
+                .setItems(new String[]{"Yes", "No"}, (dialogInterface, which) -> {
+                    switch (which) {
+                        case 0:
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelable("inventory", inventoryDetails.get(pos).getInventory());
+                            NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_content_main);
+                            navController.navigate(R.id.action_nav_inventory_to_nav_add_inventory, bundle);
+                            break;
 
+                        case 1:
+                            break;
+                    }
+                }).show();
     }
 
     @Override

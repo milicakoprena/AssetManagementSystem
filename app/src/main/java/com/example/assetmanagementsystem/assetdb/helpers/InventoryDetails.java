@@ -1,17 +1,17 @@
 package com.example.assetmanagementsystem.assetdb.helpers;
-
 import com.example.assetmanagementsystem.assetdb.model.Asset;
+import com.example.assetmanagementsystem.assetdb.model.Inventory;
 
 public class InventoryDetails {
-    private long inventoryId;
+    private Inventory inventory;
     private Asset asset;
     private String oldEmployee;
     private String newEmployee;
     private String oldLocation;
     private String newLocation;
 
-    public InventoryDetails(long inventoryId, Asset asset, String oldEmployee, String newEmployee, String oldLocation, String newLocation) {
-        this.inventoryId = inventoryId;
+    public InventoryDetails(Inventory inventory, Asset asset, String oldEmployee, String newEmployee, String oldLocation, String newLocation) {
+        this.inventory = inventory;
         this.asset = asset;
         this.oldEmployee = oldEmployee;
         this.newEmployee = newEmployee;
@@ -19,12 +19,12 @@ public class InventoryDetails {
         this.newLocation = newLocation;
     }
 
-    public long getInventoryId() {
-        return inventoryId;
+    public Inventory getInventory() {
+        return inventory;
     }
 
-    public void setInventoryId(long inventoryId) {
-        this.inventoryId = inventoryId;
+    public void setInventory(Inventory inventory) {
+        this.inventory = inventory;
     }
 
     public Asset getAsset() {

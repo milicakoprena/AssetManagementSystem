@@ -1,5 +1,8 @@
 package com.example.assetmanagementsystem.assetdb.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
@@ -38,7 +41,7 @@ import java.util.Objects;
                         onDelete = ForeignKey.CASCADE
                 )
         })
-public class Inventory implements Serializable {
+public class Inventory implements Serializable, Parcelable {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "inventory_id")
     private long inventoryId;
@@ -63,6 +66,44 @@ public class Inventory implements Serializable {
     @Ignore
     public Inventory() {
     }
+
+
+    protected Inventory(Parcel in) {
+        inventoryId = in.readLong();
+        barcode = in.readLong();
+        oldEmployeeId = in.readLong();
+        newEmployeeId = in.readLong();
+        oldLocationId = in.readLong();
+        newLocationId = in.readLong();
+    }
+
+    public static final Creator<Inventory> CREATOR = new Creator<Inventory>() {
+        @Override
+        public Inventory createFromParcel(Parcel in) {
+            return new Inventory(in);
+        }
+
+        @Override
+        public Inventory[] newArray(int size) {
+            return new Inventory[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(inventoryId);
+        dest.writeLong(barcode);
+        dest.writeLong(oldEmployeeId);
+        dest.writeLong(newEmployeeId);
+        dest.writeLong(oldLocationId);
+        dest.writeLong(newLocationId);
+    }
+
 
     public long getInventoryId() {
         return inventoryId;
