@@ -8,20 +8,14 @@
 
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="5dp"
         >
 
         <LinearLayout
-            android:background="@color/secondary_50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            style="@style/CustomListItemStyle">
             <ImageView
                 android:id="@+id/item_image"
                 android:layout_width="100dp"
@@ -42,14 +36,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    tools:text="Name"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="15dp" />
 
                 <TextView
                     android:id="@+id/item_price"
                     android:layout_gravity="center"
-                    tools:text="Price"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -59,7 +51,6 @@
                 <TextView
                     android:id="@+id/item_category"
                     android:layout_gravity="center"
-                    tools:text="Category"
                     android:textSize="16sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -107,4 +107,5 @@
     <string name="update_location">Ažuriraj lokaciju</string>
     <string name="delete">Ukloni</string>
     <string name="update">Ažuriraj</string>
+    <string name="my_location">Moja lokacija</string>
 </resources>

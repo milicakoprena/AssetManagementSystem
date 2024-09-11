@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.locations.LocationsFragment"
-    android:background="@color/primary_50">
+   >
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_location"
@@ -25,10 +25,11 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/recycler_view"
+        app:layout_constraintBottom_toTopOf="@id/layout"
         app:layout_constraintHeight_percent="0.6" />
 
     <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/google_map"
@@ -36,7 +37,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHeight_percent="0.4"
-        android:orientation="vertical">
+        style="@style/CustomLinearLayoutForLists">
         <androidx.appcompat.widget.SearchView
             android:id="@+id/search_locationName"
             android:layout_width="match_parent"

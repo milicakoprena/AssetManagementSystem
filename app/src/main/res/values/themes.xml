@@ -15,6 +15,7 @@
         <!-- Customize your theme here. -->
         <item name="textInputStyle">@style/CustomMaterialTextInputLayoutStyle</item>
         <item name="imageButtonStyle">@style/CustomImageButtonStyle</item>
+        <item name="cardViewStyle">@style/CustomCardViewStyle</item>
     </style>
 
     <style name="Theme.AssetManagementSystem.NoActionBar">
@@ -36,4 +37,63 @@
         <item name="android:background">@android:color/transparent</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
+
+    <style name="LinearLayoutFormStyle">
+        <item name="android:layout_margin">0dp</item>
+        <item name="android:background">@color/primary_100</item>
+        <item name="android:gravity">center</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="CustomButtonWithDrawableStyle" parent="Widget.AppCompat.Button">
+        <item name="drawableTint">@color/primary_50</item>
+    </style>
+
+
+    <style name="CustomSwitchStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/input_icon_color</item>
+    </style>
+
+    <style name="CustomBigButtonStyle">
+        <item name="android:textSize">20sp</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:drawableTint">@color/primary_50</item>
+    </style>
+
+    <style name="CustomCardViewStyle" parent="CardView">
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardUseCompatPadding">true</item>
+        <item name="cardElevation">5dp</item>
+    </style>
+
+    <style name="CustomListItemStyle">
+        <item name="android:background">@color/secondary_50</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:orientation">horizontal</item>
+    </style>
+
+    <style name="CustomLinearLayoutForLists">
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">20dp</item>
+        <item name="android:background">@color/primary_100</item>
+    </style>
+
+    <style name="CustomSpinnerItemStyle">
+        <item name="android:padding">16dp</item>
+        <item name="android:textColor">@color/input_icon_color</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:background">@color/secondary_50</item>
+    </style>
+
+    <style name="CustomSpinnerLayoutStyle">
+        <item name="android:background">@color/secondary_50</item>
+    </style>
+
+    <style name="CustomNavigationStyle" parent="Widget.MaterialComponents.NavigationView">
+        <item name="android:background">@color/secondary_50</item>
+        <item name="itemTextColor">@color/primary_900</item>
+        <item name="itemIconTint">@color/primary_900</item>
+    </style>
+
 </resources>

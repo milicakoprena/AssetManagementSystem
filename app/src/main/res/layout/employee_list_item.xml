@@ -7,20 +7,14 @@
     android:orientation="horizontal">
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="5dp"
-        card_view:cardUseCompatPadding="true"
-        card_view:cardElevation="5dp"
         >
 
         <LinearLayout
-            android:background="@color/secondary_50"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
-            android:orientation="horizontal">
+            style="@style/CustomListItemStyle">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -34,13 +28,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
-                    tools:text="Name"
                     android:layout_marginBottom="5dp" />
 
                 <TextView
                     android:id="@+id/item_email"
                     android:layout_gravity="center"
-                    tools:text="Email"
                     android:textSize="14sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

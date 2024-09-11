@@ -9,10 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:background="@color/primary_100"
-        android:gravity="center"
-        android:orientation="vertical"
+        style="@style/LinearLayoutFormStyle"
         android:padding="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,13 +43,13 @@
                     android:id="@+id/tw_barcode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:layout_marginBottom="10dp"></TextView>
                 <TextView
                     android:id="@+id/tw_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"></TextView>
+                    android:textSize="16sp"></TextView>
             </LinearLayout>
 
         </LinearLayout>
@@ -85,7 +82,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginRight="10dp"
                 android:drawableLeft="@drawable/icon_search"
-                android:drawableTint="@color/primary_50"
+                style="@style/CustomButtonWithDrawableStyle"
                 android:tooltipText="@string/button_find" />
 
             <Button
@@ -94,7 +91,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="5dp"
                 android:drawableLeft="@drawable/icon_scan"
-                android:drawableTint="@color/primary_50"
+                style="@style/CustomButtonWithDrawableStyle"
                 android:text="@string/button_scan" />
         </LinearLayout>
 
@@ -104,7 +101,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="@string/current_employee"
-            android:textSize="18dp"></TextView>
+            android:textSize="18sp"></TextView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -118,14 +115,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/new_employee"
                 android:layout_marginRight="10dp"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:layout_gravity="center_vertical"></TextView>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@color/secondary_50"
+                style="@style/CustomSpinnerLayoutStyle"
                 android:hint="@string/select_employee"
                 android:layout_gravity="bottom">
 
@@ -142,10 +139,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/same_employee"
-            android:textSize="18dp"
-            android:textColor="@color/input_icon_color"
             android:layout_gravity="start"
             android:layout_marginBottom="20dp"
+            style="@style/CustomSwitchStyle"
             ></Switch>
 
         <TextView
@@ -154,7 +150,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
             android:text="@string/current_location"
-            android:textSize="18dp"></TextView>
+            android:textSize="18sp"></TextView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,14 +164,14 @@
                 android:layout_height="wrap_content"
                 android:text="@string/new_location"
                 android:layout_marginRight="10dp"
-                android:textSize="18dp"
+                android:textSize="18sp"
                 android:layout_gravity="center_vertical"></TextView>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
-                android:background="@color/secondary_50"
+                style="@style/CustomSpinnerLayoutStyle"
                 android:hint="@string/select_location"
                 android:layout_gravity="bottom">
 
@@ -192,8 +188,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/same_location"
-            android:textSize="18dp"
-            android:textColor="@color/input_icon_color"
+            style="@style/CustomSwitchStyle"
             android:layout_gravity="start"
             android:layout_marginBottom="20dp"
             ></Switch>
@@ -204,9 +199,7 @@
             android:layout_height="wrap_content"
             android:text="@string/button_add_inventory"
             android:drawableLeft="@drawable/icon_add_inventory"
-            android:drawableTint="@color/primary_50"
-            android:textSize="20dp"
-            android:padding="10dp"
+            style="@style/CustomBigButtonStyle"
             />
     </LinearLayout>
 

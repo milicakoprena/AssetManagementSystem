@@ -9,10 +9,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="0dp"
-        android:background="@color/primary_100"
-        android:gravity="center"
-        android:orientation="vertical"
+        style="@style/LinearLayoutFormStyle"
         android:padding="30dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,13 +43,13 @@
                     android:id="@+id/tw_barcode"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="18dp"
+                    android:textSize="18sp"
                     android:layout_marginBottom="10dp"></TextView>
                 <TextView
                     android:id="@+id/tw_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16dp"></TextView>
+                    android:textSize="16sp"></TextView>
             </LinearLayout>
 
         </LinearLayout>
@@ -83,8 +80,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:id="@+id/button_scan"
+                style="@style/CustomButtonWithDrawableStyle"
                 android:drawableLeft="@drawable/icon_scan"
-                android:drawableTint="@color/primary_50"
                 android:layout_marginTop="5dp"
                 android:text="@string/button_scan" />
         </LinearLayout>
@@ -138,7 +135,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/secondary_50"
+            style="@style/CustomSpinnerLayoutStyle"
             android:hint="@string/select_category">
 
             <Spinner
@@ -152,7 +149,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/secondary_50"
+            style="@style/CustomSpinnerLayoutStyle"
             android:hint="@string/select_employee">
 
             <Spinner
@@ -166,7 +163,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
-            android:background="@color/secondary_50"
+            style="@style/CustomSpinnerLayoutStyle"
             android:hint="@string/select_location">
 
             <Spinner
@@ -189,7 +186,7 @@
                 android:layout_weight="1"
                 android:text="@string/button_gallery"
                 android:drawableLeft="@drawable/icon_gallery"
-                android:drawableTint="@color/primary_50"
+                style="@style/CustomButtonWithDrawableStyle"
                 android:layout_marginEnd="5dp" />
 
             <Button
@@ -199,7 +196,7 @@
                 android:layout_weight="1"
                 android:text="@string/button_camera"
                 android:drawableLeft="@drawable/icon_camera"
-                android:drawableTint="@color/primary_50"
+                style="@style/CustomButtonWithDrawableStyle"
                 android:layout_marginStart="5dp" />
         </LinearLayout>
 
@@ -210,9 +207,7 @@
             android:layout_height="wrap_content"
             android:text="@string/button_add_asset"
             android:drawableLeft="@drawable/icon_add_asset"
-            android:drawableTint="@color/primary_50"
-            android:textSize="20dp"
-            android:padding="10dp"
+            style="@style/CustomBigButtonStyle"
             />
     </LinearLayout>
 
