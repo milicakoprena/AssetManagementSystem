@@ -48,7 +48,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
             navController.navigate(R.id.action_nav_inventory_to_nav_add_inventory);
         });
 
-        recyclerView = root.findViewById(R.id.recycler_view);
+        recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         inventoryDetails = new ArrayList<>();
         filteredInventoryDetails = new ArrayList<>();
@@ -56,7 +56,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
         inventoryAdapter = new InventoryAdapter(filteredInventoryDetails, requireContext(), this);
         recyclerView.setAdapter(inventoryAdapter);
 
-        searchAssetName = root.findViewById(R.id.search_assetName);
+        searchAssetName = binding.searchAssetName;
         searchAssetName.setIconifiedByDefault(false);
         searchAssetName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -72,7 +72,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
             }
         });
 
-        searchNewEmployee = root.findViewById(R.id.search_newEmployee);
+        searchNewEmployee = binding.searchNewEmployee;
         searchNewEmployee.setIconifiedByDefault(false);
         searchNewEmployee.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -88,7 +88,7 @@ public class InventoryFragment extends Fragment implements InventoryAdapter.OnIn
             }
         });
 
-        searchNewLocation = root.findViewById(R.id.search_newLocation);
+        searchNewLocation = binding.searchNewLocation;
         searchNewLocation.setIconifiedByDefault(false);
         searchNewLocation.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

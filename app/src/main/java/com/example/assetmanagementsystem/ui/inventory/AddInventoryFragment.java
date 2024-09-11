@@ -21,6 +21,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.bumptech.glide.request.RequestOptions;
 import com.example.assetmanagementsystem.R;
@@ -141,8 +142,7 @@ public class AddInventoryFragment extends Fragment {
             if (inventory != null) {
                 update = true;
                 findAssetById(String.valueOf(inventory.getBarcode()));
-
-                buttonAdd.setText("Update inventory");
+                buttonAdd.setText(getString(R.string.update_inventory));
                 buttonAdd.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

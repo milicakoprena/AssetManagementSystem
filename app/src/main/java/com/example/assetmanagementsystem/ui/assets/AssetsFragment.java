@@ -42,8 +42,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentAssetsBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -55,7 +54,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
             navController.navigate(R.id.action_nav_assets_to_nav_add_asset);
         });
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         assets = new ArrayList<>();
         filteredAssets = new ArrayList<>();
@@ -63,7 +62,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
         adapter = new AssetsAdapter(filteredAssets, requireContext(), this);
         recyclerView.setAdapter(adapter);
 
-        searchAssetName = view.findViewById(R.id.search_assetName);
+        searchAssetName = binding.searchAssetName;
         searchAssetName.setIconifiedByDefault(false);
         searchAssetName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -81,7 +80,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
             }
         });
 
-        searchAssetDesc = view.findViewById(R.id.search_assetDesc);
+        searchAssetDesc =  binding.searchAssetDesc;
         searchAssetDesc.setIconifiedByDefault(false);
         searchAssetDesc.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -156,20 +155,7 @@ public class AssetsFragment extends Fragment implements AssetsAdapter.OnAssetIte
                 .setItems(new String[]{getString(R.string.yes), getString(R.string.no)}, (dialogInterface, which) -> {
                     switch (which) {
                         case 0:
-                            new AsyncTask<Void, Void, Void>() {
-                                @Override
-                                protected Void doInBackground(Void... voids) {
-                                    assetDatabase.getAssetDao().deleteAsset(assets.get(pos));
-                                    return null;
-                                }
-
-                                @Override
-                                protected void onPostExecute(Void aVoid) {
-                                    assets.remove(pos);
-                                    adapter.notifyItemRemoved(pos);
-                                    Toast.makeText(requireContext(), getString(R.string.asset_deleted), Toast.LENGTH_SHORT).show();
-                                }
-                            }.execute();
+                            new AssetsAsync.DeleteTask(this,pos).execute();
                             break;
                         case 1:
                             break;

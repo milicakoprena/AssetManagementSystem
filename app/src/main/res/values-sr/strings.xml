@@ -108,4 +108,7 @@
     <string name="delete">Ukloni</string>
     <string name="update">Ažuriraj</string>
     <string name="my_location">Moja lokacija</string>
+    <string name="update_employee">Ažuriraj zaposlenog</string>
+    <string name="update_inventory">Ažuriraj popis</string>
+    <string name="barcode_error">Barkod mora biti jedinstven!</string>
 </resources>

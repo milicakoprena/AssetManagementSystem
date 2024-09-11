@@ -39,7 +39,7 @@ public class AddEmployeeFragment extends Fragment {
                 et_firstName.setText(employee.getFirstName());
                 et_lastName.setText(employee.getLastName());
                 et_email.setText(employee.getEmail());
-                button_add.setText("UPDATE EMPLOYEE");
+                button_add.setText(getString(R.string.update_employee));
                 button_add.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {

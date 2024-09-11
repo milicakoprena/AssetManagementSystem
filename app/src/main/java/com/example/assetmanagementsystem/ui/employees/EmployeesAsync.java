@@ -16,6 +16,7 @@ import java.util.List;
 public class EmployeesAsync {
     protected static class RetrieveTask extends AsyncTask<Void, Void, List<Employee>> {
         private WeakReference<EmployeesFragment> reference;
+
         RetrieveTask(EmployeesFragment fragment) {
             reference = new WeakReference<>(fragment);
         }

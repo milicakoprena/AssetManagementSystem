@@ -54,7 +54,7 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
         });
 
 
-        recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         employees = new ArrayList<>();
         filteredEmployees = new ArrayList<>();
@@ -62,7 +62,7 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
         employeesAdapter = new EmployeesAdapter(filteredEmployees, requireContext(), this);
         recyclerView.setAdapter(employeesAdapter);
 
-        searchEmployeeName = view.findViewById(R.id.search_employeeName);
+        searchEmployeeName = binding.searchEmployeeName;
         searchEmployeeName.setIconifiedByDefault(false);
         searchEmployeeName.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -78,7 +78,7 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
             }
         });
 
-        searchEmployeeEmail = view.findViewById(R.id.search_employeeEmail);
+        searchEmployeeEmail = binding.searchEmployeeEmail;
         searchEmployeeEmail.setIconifiedByDefault(false);
         searchEmployeeEmail.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -151,7 +151,6 @@ public class EmployeesFragment extends Fragment implements EmployeesAdapter.OnEm
                             break;
                     }
                 }).show();
-
     }
 
 

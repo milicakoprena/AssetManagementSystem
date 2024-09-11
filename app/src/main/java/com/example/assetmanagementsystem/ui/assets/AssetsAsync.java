@@ -1,5 +1,6 @@
 package com.example.assetmanagementsystem.ui.assets;
 
+import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -140,15 +141,18 @@ public class AssetsAsync {
             AddAssetFragment fragment = fragmentReference.get();
             if (fragment != null) {
                 try {
+                    long assetId = fragment.assetDatabase.getAssetDao().insertAsset(asset);
                     if (fragment.photoUri != null) {
                         Task<Void> uploadTask = uploadImageToFirebase(fragment, fragment.photoUri, fragment.imageUrl);
                         Tasks.await(uploadTask);
                     }
-                    long assetId = fragment.assetDatabase.getAssetDao().insertAsset(asset);
                     Log.e("ID ", "doInBackground: " + assetId);
+                } catch (SQLiteConstraintException e) {
+                    Log.e("DatabaseError", "Constraint violation: " + e.getMessage());
+                    return false;
                 } catch (Exception e) {
                     e.printStackTrace();
-                    return false;  // Return false in case of any errors
+                    return false;
                 }
             }
             return true;
@@ -161,6 +165,10 @@ public class AssetsAsync {
                 Toast.makeText(fragment.requireContext(), fragment.getString(R.string.asset_added), Toast.LENGTH_SHORT).show();
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_asset_to_nav_assets);
+            }
+            if (!bool) {
+                Toast.makeText(fragment.requireContext(), fragment.getString(R.string.barcode_error), Toast.LENGTH_SHORT).show();
+                fragment.editTextBarcode.setText("");
             }
         }
     }
@@ -201,6 +209,29 @@ public class AssetsAsync {
                 NavController navController = Navigation.findNavController(fragment.requireActivity(), R.id.nav_host_fragment_content_main);
                 navController.navigate(R.id.action_nav_add_asset_to_nav_assets);
             }
+        }
+    }
+
+
+    protected static class DeleteTask extends AsyncTask<Void, Void, Void> {
+        private WeakReference<AssetsFragment> fragmentReference;
+        private int pos;
+
+        DeleteTask(AssetsFragment fragment, int pos) {
+            fragmentReference = new WeakReference<>(fragment);
+            this.pos = pos;
+        }
+        @Override
+        protected Void doInBackground(Void... voids) {
+            fragmentReference.get().assetDatabase.getAssetDao().deleteAsset(fragmentReference.get().assets.get(pos));
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            fragmentReference.get().assets.remove(pos);
+            fragmentReference.get().adapter.notifyItemRemoved(pos);
+            Toast.makeText(fragmentReference.get().requireContext(), fragmentReference.get().getString(R.string.asset_deleted), Toast.LENGTH_SHORT).show();
         }
     }
 

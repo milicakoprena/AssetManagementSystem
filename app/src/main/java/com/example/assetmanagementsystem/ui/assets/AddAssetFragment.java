@@ -61,7 +61,7 @@ public class AddAssetFragment extends Fragment {
     private Button buttonAdd;
     private Button buttonGallery;
     private Button buttonCamera;
-    private TextInputEditText editTextBarcode;
+    protected TextInputEditText editTextBarcode;
     private TextInputEditText editTextName;
     private TextInputEditText editTextDescription;
     private TextInputEditText editTextPrice;

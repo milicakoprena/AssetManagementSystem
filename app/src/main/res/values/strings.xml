@@ -109,4 +109,7 @@
     <string name="delete">Delete</string>
     <string name="update">Update</string>
     <string name="my_location">My location</string>
+    <string name="update_employee">Update employee</string>
+    <string name="update_inventory">Update inventory</string>
+    <string name="barcode_error">Barcode must be unique!</string>
 </resources>
